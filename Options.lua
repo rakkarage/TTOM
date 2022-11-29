@@ -5,7 +5,7 @@ TTOM.defaults = {
 }
 
 local function createFontString(parent, text, size, style)
-	local fs = parent:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	local fs = parent:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	fs:SetText(text)
 	return fs
 end
@@ -24,14 +24,13 @@ end
 
 local function createButton(parent, text)
 	local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
-	b:SetWidth(100)
-	b:SetHeight(40)
+	b:SetSize(100, 40)
 	b:SetText(text)
 	return b
 end
 
 local function createDropDown(parent, init)
-	local dd = CreateFrame("Frame", "DropDown", parent, "UIDropDownMenuTemplate")
+	local dd = CreateFrame("Frame", nil, parent, "UIDropDownMenuTemplate")
 	UIDropDownMenu_SetWidth(dd, 120)
 	UIDropDownMenu_Initialize(dd, init)
 	return dd
