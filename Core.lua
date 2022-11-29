@@ -39,18 +39,18 @@ local function updateTooltip(tooltip)
 	elseif anchor == "BOTTOMRIGHT" then
 		mX = mX - tooltip:GetWidth()
 	elseif anchor == "TOP" then
-		mX = mX - (tooltip:GetWidth() / 2)
+		mX = mX - tooltip:GetWidth() / 2
 		mY = mY - tooltip:GetHeight()
 	elseif anchor == "BOTTOM" then
-		mX = mX - (tooltip:GetWidth() / 2)
+		mX = mX - tooltip:GetWidth() / 2
 	elseif anchor == "LEFT" then
-		mY = mY - (tooltip:GetHeight() / 2)
+		mY = mY - tooltip:GetHeight() / 2
 	elseif anchor == "RIGHT" then
 		mX = mX - tooltip:GetWidth()
-		mY = mY - (tooltip:GetHeight() / 2)
+		mY = mY - tooltip:GetHeight() / 2
 	elseif anchor == "CENTER" then
-		mX = mX - (tooltip:GetWidth() / 2)
-		mY = mY - (tooltip:GetHeight() / 2)
+		mX = mX - tooltip:GetWidth() / 2
+		mY = mY - tooltip:GetHeight() / 2
 	end
 	tooltip:ClearAllPoints()
 	tooltip:SetPoint(point, "UIParent", point, oX + mX, oY + mY)
