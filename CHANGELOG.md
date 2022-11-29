@@ -1,4 +1,4 @@
 # CHANGELOG
 
-- v1.0
+- v2023.0
   - initial release
