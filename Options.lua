@@ -18,7 +18,7 @@ local function createEditBox(parent, key, text)
 	eb:SetAutoFocus(false)
 	EventRegistry:RegisterCallback("TTOM.OnReset", function()
 		eb:SetText(TTOMDB[key])
-	end, cb)
+	end)
 	return eb
 end
 
@@ -84,7 +84,7 @@ local function menuInit(frame, level, menuList)
 	EventRegistry:RegisterCallback("TTOM.OnReset", function()
 		init(frame, level, menuList)
 		UIDropDownMenu_SetText(frame, TTOMDB.anchor)
-	end, frame)
+	end)
 end
 
 function TTOM:InitializeOptions()
