@@ -13,9 +13,6 @@ jobs:
         with:
           fetch-depth: 0
       - uses: BigWigsMods/packager@v2
-        with:
-          args: - manual-changelog
-
       - uses: actions/upload-artifact@v1
         with:
           name: TTOM
