@@ -14,4 +14,4 @@ jobs:
           fetch-depth: 0
       - uses: BigWigsMods/packager@v2
         with:
-          args: -p 715083
+          args: -p 715083 -w 26496 -a JZKbmY61
