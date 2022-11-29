@@ -37,60 +37,6 @@ local function createDropDown(parent, init)
 	return dd
 end
 
-local function hMenuInit(frame, level, menuList)
-	local function init(frame, level, menuList)
-		local info = UIDropDownMenu_CreateInfo()
-		info.func = function(self, arg1, arg2, checked)
-			if arg1 == 1 then
-				TTOMDB.hAnchor = "LEFT"
-			elseif arg1 == 2 then
-				TTOMDB.hAnchor = "CENTER"
-			elseif arg1 == 3 then
-				TTOMDB.hAnchor = "RIGHT"
-			end
-			UIDropDownMenu_SetText(frame, TTOMDB.hAnchor)
-		end
-		info.text, info.checked, info.arg1 = "LEFT", TTOMDB.hAnchor == "LEFT", 1
-		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "CENTER", TTOMDB.hAnchor == "CENTER", 2
-		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "RIGHT", TTOMDB.hAnchor == "RIGHT", 3
-		UIDropDownMenu_AddButton(info)
-	end
-	init(frame, level, menuList)
-	EventRegistry:RegisterCallback("TTOM.OnReset", function()
-		init(frame, level, menuList)
-		UIDropDownMenu_SetText(frame, TTOMDB.hAnchor)
-	end, frame)
-end
-
-local function vMenuInit(frame, level, menuList)
-	local function init(frame, level, menuList)
-		local info = UIDropDownMenu_CreateInfo()
-		info.func = function(self, arg1, arg2, checked)
-			if arg1 == 1 then
-				TTOMDB.vAnchor = "TOP"
-			elseif arg1 == 2 then
-				TTOMDB.vAnchor = "CENTER"
-			elseif arg1 == 3 then
-				TTOMDB.vAnchor = "BOTTOM"
-			end
-			UIDropDownMenu_SetText(frame, TTOMDB.vAnchor)
-		end
-		info.text, info.checked, info.arg1 = "TOP", TTOMDB.vAnchor == "TOP", 1
-		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "CENTER", TTOMDB.vAnchor == "CENTER", 2
-		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "BOTTOM", TTOMDB.vAnchor == "BOTTOM", 3
-		UIDropDownMenu_AddButton(info)
-	end
-	init(frame, level, menuList)
-	EventRegistry:RegisterCallback("TTOM.OnReset", function()
-		init(frame, level, menuList)
-		UIDropDownMenu_SetText(frame, TTOMDB.vAnchor)
-	end, frame)
-end
-
 local function menuInit(frame, level, menuList)
 	local function init(frame, level, menuList)
 		local info = UIDropDownMenu_CreateInfo()
