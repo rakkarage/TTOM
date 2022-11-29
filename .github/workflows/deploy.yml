@@ -13,6 +13,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: BigWigsMods/packager@v2
+        with:
       - uses: actions/upload-artifact@v1
         with:
-          name: TTOM.zip
+          name: TTOM
