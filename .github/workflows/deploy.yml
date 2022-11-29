@@ -17,4 +17,5 @@ jobs:
           args: -n TTOM.zip
       - uses: actions/upload-artifact@v1
         with:
+          name: TTOM.zip
           path: TTOM.zip
