@@ -1,0 +1,9 @@
+## Interface: 100002
+## Version: v2023.0
+## Title: TTOM
+## Notes: ToolTip On Mouse
+## Author: egingell, rakkarage@gmail.com
+## SavedVariables: TTOMDB
+
+Core.lua
+Options.lua
