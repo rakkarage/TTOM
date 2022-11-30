@@ -4,7 +4,7 @@ TTOM.defaults = {
 	anchor = "TOPLEFT"
 }
 
-local function createFontString(parent, text, size, style)
+local function createFontString(parent, text)
 	local fs = parent:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	fs:SetText(text)
 	return fs
@@ -99,7 +99,7 @@ function TTOM:InitializeOptions()
 		end
 	end)
 
-	local xLabel = createFontString(self.options, "X Offset", 16)
+	local xLabel = createFontString(self.options, "X Offset")
 	xLabel:SetPoint("LEFT", xEdit, "RIGHT", 16, 0)
 
 	local yEdit = createEditBox(self.options, "y", TTOMDB.y)
@@ -118,13 +118,13 @@ function TTOM:InitializeOptions()
 		end
 	end)
 
-	local yLabel = createFontString(self.options, "Y Offset", 16)
+	local yLabel = createFontString(self.options, "Y Offset")
 	yLabel:SetPoint("LEFT", yEdit, "RIGHT", 16, 0)
 
 	local anchor = createDropDown(self.options, menuInit)
 	anchor:SetPoint("TOPLEFT", yEdit, "BOTTOMLEFT", -20, -16)
 
-	local anchorLabel = createFontString(self.options, "Anchor", 16)
+	local anchorLabel = createFontString(self.options, "Anchor")
 	anchorLabel:SetPoint("LEFT", anchor, "RIGHT", 0, 0)
 
 	local reset = createButton(self.options, "Reset")
