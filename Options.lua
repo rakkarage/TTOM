@@ -40,24 +40,15 @@ local function menuInit(frame, level, menuList)
 	local function init(frame, level, menuList)
 		local info = UIDropDownMenu_CreateInfo()
 		info.func = function(self, arg1, arg2, checked)
-			if arg1 == 1 then
-				TTOMDB.anchor = "TOPLEFT"
-			elseif arg1 == 2 then
-				TTOMDB.anchor = "TOPRIGHT"
-			elseif arg1 == 3 then
-				TTOMDB.anchor = "BOTTOMLEFT"
-			elseif arg1 == 4 then
-				TTOMDB.anchor = "BOTTOMRIGHT"
-			elseif arg1 == 5 then
-				TTOMDB.anchor = "TOP"
-			elseif arg1 == 6 then
-				TTOMDB.anchor = "BOTTOM"
-			elseif arg1 == 7 then
-				TTOMDB.anchor = "LEFT"
-			elseif arg1 == 8 then
-				TTOMDB.anchor = "RIGHT"
-			elseif arg1 == 9 then
-				TTOMDB.anchor = "CENTER"
+			if arg1 == 1 then TTOMDB.anchor = "TOPLEFT"
+			elseif arg1 == 2 then TTOMDB.anchor = "TOPRIGHT"
+			elseif arg1 == 3 then TTOMDB.anchor = "BOTTOMLEFT"
+			elseif arg1 == 4 then TTOMDB.anchor = "BOTTOMRIGHT"
+			elseif arg1 == 5 then TTOMDB.anchor = "TOP"
+			elseif arg1 == 6 then TTOMDB.anchor = "BOTTOM"
+			elseif arg1 == 7 then TTOMDB.anchor = "LEFT"
+			elseif arg1 == 8 then TTOMDB.anchor = "RIGHT"
+			elseif arg1 == 9 then TTOMDB.anchor = "CENTER"
 			end
 			UIDropDownMenu_SetText(frame, TTOMDB.anchor)
 		end
