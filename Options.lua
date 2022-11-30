@@ -70,11 +70,11 @@ local function menuInit(frame, level, menuList)
 		UIDropDownMenu_AddButton(info)
 		info.text, info.checked, info.arg1 = "CENTER", TTOMDB.anchor == "CENTER", 9
 		UIDropDownMenu_AddButton(info)
+		UIDropDownMenu_SetText(frame, TTOMDB.anchor)
 	end
 	init(frame, level, menuList)
 	EventRegistry:RegisterCallback("TTOM.OnReset", function()
 		init(frame, level, menuList)
-		UIDropDownMenu_SetText(frame, TTOMDB.anchor)
 	end)
 end
 
@@ -123,7 +123,6 @@ function TTOM:InitializeOptions()
 
 	local anchor = createDropDown(self.options, menuInit)
 	anchor:SetPoint("TOPLEFT", yEdit, "BOTTOMLEFT", -20, -16)
-	UIDropDownMenu_SetText(anchor, TTOMDB.anchor)
 
 	local anchorLabel = createFontString(self.options, "Anchor", 16)
 	anchorLabel:SetPoint("LEFT", anchor, "RIGHT", 0, 0)
