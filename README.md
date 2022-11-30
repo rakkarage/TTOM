@@ -8,3 +8,5 @@ World of Warcraft addon: Attach tooltip to mouse with anchor and offset.
   - Can also use `/ttom` or `/tooltiponmouse` to go directly to options.
 - Adjust anchor and offset.
 - Reset will restore default settings.
+
+Based on: <https://curseforge.com/wow/addons/tooltiponmouse>
