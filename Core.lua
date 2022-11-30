@@ -30,25 +30,24 @@ local function updateTooltip(tooltip)
 	local scale = UIParent:GetEffectiveScale()
 	mX, mY = GetCursorPosition()
 	mX, mY = mX / scale, mY / scale
-	local anchor = string.upper(TTOMDB.anchor)
-	if anchor == "TOPLEFT" then
+	if TTOMDB.anchor == "TOPLEFT" then
 		mY = mY - tooltip:GetHeight()
-	elseif anchor == "TOPRIGHT" then
+	elseif TTOMDB.anchor == "TOPRIGHT" then
 		mX = mX - tooltip:GetWidth()
 		mY = mY - tooltip:GetHeight()
-	elseif anchor == "BOTTOMRIGHT" then
+	elseif TTOMDB.anchor == "BOTTOMRIGHT" then
 		mX = mX - tooltip:GetWidth()
-	elseif anchor == "TOP" then
+	elseif TTOMDB.anchor == "TOP" then
 		mX = mX - tooltip:GetWidth() / 2
 		mY = mY - tooltip:GetHeight()
-	elseif anchor == "BOTTOM" then
+	elseif TTOMDB.anchor == "BOTTOM" then
 		mX = mX - tooltip:GetWidth() / 2
-	elseif anchor == "LEFT" then
+	elseif TTOMDB.anchor == "LEFT" then
 		mY = mY - tooltip:GetHeight() / 2
-	elseif anchor == "RIGHT" then
+	elseif TTOMDB.anchor == "RIGHT" then
 		mX = mX - tooltip:GetWidth()
 		mY = mY - tooltip:GetHeight() / 2
-	elseif anchor == "CENTER" then
+	elseif TTOMDB.anchor == "CENTER" then
 		mX = mX - tooltip:GetWidth() / 2
 		mY = mY - tooltip:GetHeight() / 2
 	end
