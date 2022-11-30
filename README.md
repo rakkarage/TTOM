@@ -2,7 +2,7 @@
 
 ![image](TTOM.png)
 
-World of Warcraft addon: Attach tooltip to mouse with anchor and offset.
+World of Warcraft addon: Attach tooltip to mouse, with anchor and offset.
 
 - Open Settings->Addons->ToolTipOnMouse to change options.
   - Can also use `/ttom` or `/tooltiponmouse` to go directly to options.
