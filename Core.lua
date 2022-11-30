@@ -70,7 +70,7 @@ function GameTooltip_SetDefaultAnchor(tooltip, parent, ...)
 	end
 	updateTooltip(tooltip)
 	if not TTOM.tooltips[tostring(tooltip)] then
-		TTOM.tooltips[tostring(tooltip)] = 1
+		TTOM.tooltips[tostring(tooltip)] = true
 		tooltip:HookScript("OnUpdate", updateTooltip)
 	end
 end
