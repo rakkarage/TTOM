@@ -1,9 +1,3 @@
-TTOM.defaults = {
-	x = "32",
-	y = "-32",
-	anchor = "TOPLEFT"
-}
-
 local function createFontString(parent, text)
 	local fs = parent:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	fs:SetText(text)
@@ -12,7 +6,7 @@ end
 
 local function createEditBox(parent, key, text)
 	local eb = CreateFrame("EditBox", nil, parent, "InputBoxTemplate")
-	eb:SetSize(100, 20)
+	eb:SetSize(90, 20)
 	eb:SetText(text)
 	eb:SetCursorPosition(0)
 	eb:SetAutoFocus(false)
@@ -31,7 +25,7 @@ end
 
 local function createDropDown(parent, init)
 	local dd = CreateFrame("Frame", nil, parent, "UIDropDownMenuTemplate")
-	UIDropDownMenu_SetWidth(dd, 120)
+	UIDropDownMenu_SetWidth(dd, 90)
 	UIDropDownMenu_Initialize(dd, init)
 	return dd
 end
