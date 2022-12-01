@@ -4,7 +4,7 @@ local function createFontString(parent, text)
 	return fs
 end
 
-local function createEditBox(parent, key, text)
+local function createEditBox(parent, text, key)
 	local eb = CreateFrame("EditBox", nil, parent, "InputBoxTemplate")
 	eb:SetSize(90, 20)
 	eb:SetText(text)
@@ -23,10 +23,10 @@ local function createButton(parent, text)
 	return b
 end
 
-local function createDropDown(parent, init)
+local function createDropDown(parent, initFunc)
 	local dd = CreateFrame("Frame", nil, parent, "UIDropDownMenuTemplate")
 	UIDropDownMenu_SetWidth(dd, 90)
-	UIDropDownMenu_Initialize(dd, init)
+	UIDropDownMenu_Initialize(dd, initFunc)
 	return dd
 end
 
@@ -77,7 +77,7 @@ function TTOM:InitializeOptions()
 	self.options.name = TTOM.notes
 	InterfaceOptions_AddCategory(self.options)
 
-	local xEdit = createEditBox(self.options, "x", TTOMDB.x)
+	local xEdit = createEditBox(self.options, TTOMDB.x, "x")
 	xEdit:SetPoint("TOPLEFT", 16, -16)
 	xEdit:HookScript("OnEnterPressed", function(self) xEdit:ClearFocus() end)
 	xEdit:HookScript("OnEscapePressed", function(self) xEdit:ClearFocus() end)
@@ -88,7 +88,7 @@ function TTOM:InitializeOptions()
 				TTOMDB.x = text
 				xEdit:SetTextColor(1, 1, 1, 1)
 			else
-				xEdit:SetTextColor(1, .5, .5, 1)
+				xEdit:SetTextColor(1, 0.5, 0.5, 1)
 			end
 		end
 	end)
@@ -96,7 +96,7 @@ function TTOM:InitializeOptions()
 	local xLabel = createFontString(self.options, "X Offset")
 	xLabel:SetPoint("LEFT", xEdit, "RIGHT", 16, 0)
 
-	local yEdit = createEditBox(self.options, "y", TTOMDB.y)
+	local yEdit = createEditBox(self.options, TTOMDB.y, "y")
 	yEdit:SetPoint("TOPLEFT", xEdit, "BOTTOMLEFT", 0, -16)
 	yEdit:HookScript("OnEnterPressed", function(self) yEdit:ClearFocus() end)
 	yEdit:HookScript("OnEscapePressed", function(self) yEdit:ClearFocus() end)
@@ -107,7 +107,7 @@ function TTOM:InitializeOptions()
 				TTOMDB.y = text
 				yEdit:SetTextColor(1, 1, 1, 1)
 			else
-				yEdit:SetTextColor(1, .5, .5, 1)
+				yEdit:SetTextColor(1, 0.5, 0.5, 1)
 			end
 		end
 	end)

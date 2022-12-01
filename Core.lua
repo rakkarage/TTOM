@@ -18,9 +18,9 @@ function TTOM:ADDON_LOADED(event, name)
 	if name == TTOM.name then
 		TTOMDB = TTOMDB or {}
 		self.db = TTOMDB
-		for k, v in pairs(self.defaults) do
-			if self.db[k] == nil then
-				self.db[k] = v
+		for key, value in pairs(self.defaults) do
+			if not self.db[key] then
+				self.db[key] = value
 			end
 		end
 		self:InitializeOptions()
