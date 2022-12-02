@@ -1,5 +1,5 @@
 ## Interface: 11403
-## Version: v2023.0
+## Version: v2023.1
 ## Title: TTOM
 ## Notes: ToolTip On Mouse
 ## Author: egingell, rakkarage@gmail.com
