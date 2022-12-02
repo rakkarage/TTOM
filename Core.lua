@@ -28,6 +28,7 @@ function TTOM:ADDON_LOADED(event, name)
 end
 
 local function updateTooltip(tooltip)
+	if not tooltip.update then return end
 	local mX, mY, oX, oY = 0, 0, 0, 0
 	local point = "BOTTOMLEFT"
 	oX, oY = TTOMDB.x, TTOMDB.y
@@ -59,6 +60,10 @@ local function updateTooltip(tooltip)
 	tooltip:SetPoint(point, "UIParent", point, oX + mX, oY + mY)
 end
 
+local function hideTooltip(tooltip)
+	tooltip.update = false
+end
+
 function GameTooltip_SetDefaultAnchor(tooltip, parent, ...)
 	if not parent then
 		parent = GetMouseFocus()
@@ -72,9 +77,11 @@ function GameTooltip_SetDefaultAnchor(tooltip, parent, ...)
 		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 	end
 	updateTooltip(tooltip)
+	tooltip.update = true
 	if not TTOM.tooltips[tostring(tooltip)] then
 		TTOM.tooltips[tostring(tooltip)] = true
 		tooltip:HookScript("OnUpdate", updateTooltip)
+		tooltip:HookScript("OnHide", hideTooltip)
 	end
 end
 
