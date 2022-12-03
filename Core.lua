@@ -31,7 +31,7 @@ local function updateTooltip(tooltip)
 	if not tooltip.update then return end
 	local scale = UIParent:GetEffectiveScale()
 	local mX, mY = GetCursorPosition()
-	mX, mY = mX / scale, mY / scale
+	mX, mY = mX / scale + TTOMDB.x, mY / scale + TTOMDB.y
 	if TTOMDB.anchor == "TOPLEFT" then
 		mY = mY - tooltip:GetHeight()
 	elseif TTOMDB.anchor == "TOPRIGHT" then
@@ -54,7 +54,7 @@ local function updateTooltip(tooltip)
 		mY = mY - tooltip:GetHeight() / 2
 	end
 	tooltip:ClearAllPoints()
-	tooltip:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", TTOMDB.x + mX, TTOMDB.y + mY)
+	tooltip:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", mX, mY)
 end
 
 function GameTooltip_SetDefaultAnchor(tooltip, parent, ...)
