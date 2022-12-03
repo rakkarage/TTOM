@@ -34,35 +34,26 @@ local function menuInit(frame, level, menuList)
 	local function init(frame, level, menuList)
 		local info = UIDropDownMenu_CreateInfo()
 		info.func = function(self, arg1, arg2, checked)
-			if arg1 == 1 then TTOMDB.anchor = "TOPLEFT"
-			elseif arg1 == 2 then TTOMDB.anchor = "TOPRIGHT"
-			elseif arg1 == 3 then TTOMDB.anchor = "BOTTOMLEFT"
-			elseif arg1 == 4 then TTOMDB.anchor = "BOTTOMRIGHT"
-			elseif arg1 == 5 then TTOMDB.anchor = "TOP"
-			elseif arg1 == 6 then TTOMDB.anchor = "BOTTOM"
-			elseif arg1 == 7 then TTOMDB.anchor = "LEFT"
-			elseif arg1 == 8 then TTOMDB.anchor = "RIGHT"
-			elseif arg1 == 9 then TTOMDB.anchor = "CENTER"
-			end
+			TTOMDB.anchor = self.text
 			UIDropDownMenu_SetText(frame, TTOMDB.anchor)
 		end
-		info.text, info.checked, info.arg1 = "TOPLEFT", TTOMDB.anchor == "TOPLEFT", 1
+		info.text, info.checked = "TOPLEFT", TTOMDB.anchor == "TOPLEFT"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "TOPRIGHT", TTOMDB.anchor == "TOPRIGHT", 2
+		info.text, info.checked = "TOPRIGHT", TTOMDB.anchor == "TOPRIGHT"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "BOTTOMLEFT", TTOMDB.anchor == "BOTTOMLEFT", 3
+		info.text, info.checked = "BOTTOMLEFT", TTOMDB.anchor == "BOTTOMLEFT"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "BOTTOMRIGHT", TTOMDB.anchor == "BOTTOMRIGHT", 4
+		info.text, info.checked = "BOTTOMRIGHT", TTOMDB.anchor == "BOTTOMRIGHT"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "TOP", TTOMDB.anchor == "TOP", 5
+		info.text, info.checked = "TOP", TTOMDB.anchor == "TOP"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "BOTTOM", TTOMDB.anchor == "BOTTOM", 6
+		info.text, info.checked = "BOTTOM", TTOMDB.anchor == "BOTTOM"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "LEFT", TTOMDB.anchor == "LEFT", 7
+		info.text, info.checked = "LEFT", TTOMDB.anchor == "LEFT"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "RIGHT", TTOMDB.anchor == "RIGHT", 8
+		info.text, info.checked = "RIGHT", TTOMDB.anchor == "RIGHT"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.checked, info.arg1 = "CENTER", TTOMDB.anchor == "CENTER", 9
+		info.text, info.checked = "CENTER", TTOMDB.anchor == "CENTER"
 		UIDropDownMenu_AddButton(info)
 		UIDropDownMenu_SetText(frame, TTOMDB.anchor)
 	end
