@@ -1,11 +1,7 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
 TTOM.notes = "ToolTip On Mouse"
-TTOM.defaults = {
-	x = "32",
-	y = "-32",
-	anchor = "TOPLEFT"
-}
+TTOM.defaults = {x = "32", y = "-32", anchor = "TOPLEFT"}
 TTOM.tooltips = {}
 
 function TTOM:OnEvent(event, ...)
