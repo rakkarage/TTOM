@@ -6,4 +6,4 @@
   - add wrath & vanilla toc
   - fix aura flicker
 - v2023.2
-  - fix taint with hooksecurefunc
+  - fix taint with `hooksecurefunc`
