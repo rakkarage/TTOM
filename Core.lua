@@ -54,12 +54,6 @@ local function updateTooltip(tooltip)
 end
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-	if not parent then
-		parent = GetMouseFocus()
-	end
-	if not parent or (parent.GetName and parent:GetName() == "WorldFrame") then
-		parent = UIParent
-	end
 	if parent.unit then
 		tooltip:SetOwner(parent, "ANCHOR_PRESERVE")
 	else
