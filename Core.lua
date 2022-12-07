@@ -53,7 +53,7 @@ local function updateTooltip(tooltip)
 	tooltip:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", mX, mY)
 end
 
-function GameTooltip_SetDefaultAnchor(tooltip, parent, ...)
+hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	if not parent then
 		parent = GetMouseFocus()
 	end
@@ -74,7 +74,7 @@ function GameTooltip_SetDefaultAnchor(tooltip, parent, ...)
 			tooltip.update = false
 		end)
 	end
-end
+end)
 
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
