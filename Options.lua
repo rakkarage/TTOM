@@ -12,6 +12,7 @@ local function createEditBox(parent, text, key)
 	eb:SetAutoFocus(false)
 	EventRegistry:RegisterCallback("TTOM.OnReset", function()
 		eb:SetText(TTOMDB[key])
+		eb:SetTextColor(1, 1, 1, 1)
 	end)
 	return eb
 end
@@ -79,9 +80,9 @@ function TTOM:InitializeOptions()
 
 	local xEdit = createEditBox(self.options, TTOMDB.x, "x")
 	xEdit:SetPoint("TOPLEFT", 16, -16)
-	xEdit:HookScript("OnEnterPressed", function(self) xEdit:ClearFocus() end)
-	xEdit:HookScript("OnEscapePressed", function(self) xEdit:ClearFocus() end)
-	xEdit:HookScript("OnTextChanged", function(self, user)
+	xEdit:SetScript("OnEnterPressed", function(self) xEdit:ClearFocus() end)
+	xEdit:SetScript("OnEscapePressed", function(self) xEdit:ClearFocus() end)
+	xEdit:SetScript("OnTextChanged", function(self, user)
 		if user then
 			local text = self:GetText()
 			if tonumber(text) then
@@ -98,9 +99,9 @@ function TTOM:InitializeOptions()
 
 	local yEdit = createEditBox(self.options, TTOMDB.y, "y")
 	yEdit:SetPoint("TOPLEFT", xEdit, "BOTTOMLEFT", 0, -16)
-	yEdit:HookScript("OnEnterPressed", function(self) yEdit:ClearFocus() end)
-	yEdit:HookScript("OnEscapePressed", function(self) yEdit:ClearFocus() end)
-	yEdit:HookScript("OnTextChanged", function(self, user)
+	yEdit:SetScript("OnEnterPressed", function(self) yEdit:ClearFocus() end)
+	yEdit:SetScript("OnEscapePressed", function(self) yEdit:ClearFocus() end)
+	yEdit:SetScript("OnTextChanged", function(self, user)
 		if user then
 			local text = self:GetText()
 			if tonumber(text) then
