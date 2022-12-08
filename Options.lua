@@ -78,10 +78,12 @@ function TTOM:InitializeOptions()
 	self.options.name = TTOM.notes
 	InterfaceOptions_AddCategory(self.options)
 
-	local xEdit = createEditBox(self.options, TTOMDB.x, "x")
+	local xEdit, yEdit
+	xEdit = createEditBox(self.options, TTOMDB.x, "x")
 	xEdit:SetPoint("TOPLEFT", 16, -16)
 	xEdit:SetScript("OnEnterPressed", function(self) xEdit:ClearFocus() end)
 	xEdit:SetScript("OnEscapePressed", function(self) xEdit:ClearFocus() end)
+	xEdit:SetScript("OnTabPressed", function(self) yEdit:SetFocus() end)
 	xEdit:SetScript("OnTextChanged", function(self, user)
 		if user then
 			local text = self:GetText()
@@ -97,10 +99,11 @@ function TTOM:InitializeOptions()
 	local xLabel = createFontString(self.options, "X Offset")
 	xLabel:SetPoint("LEFT", xEdit, "RIGHT", 16, 0)
 
-	local yEdit = createEditBox(self.options, TTOMDB.y, "y")
+	yEdit = createEditBox(self.options, TTOMDB.y, "y")
 	yEdit:SetPoint("TOPLEFT", xEdit, "BOTTOMLEFT", 0, -16)
 	yEdit:SetScript("OnEnterPressed", function(self) yEdit:ClearFocus() end)
 	yEdit:SetScript("OnEscapePressed", function(self) yEdit:ClearFocus() end)
+	yEdit:SetScript("OnTabPressed", function(self) xEdit:SetFocus() end)
 	yEdit:SetScript("OnTextChanged", function(self, user)
 		if user then
 			local text = self:GetText()
