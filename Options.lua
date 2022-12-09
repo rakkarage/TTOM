@@ -10,11 +10,25 @@ local function createEditBox(parent, text, key)
 	eb:SetText(text)
 	eb:SetCursorPosition(0)
 	eb:SetAutoFocus(false)
+	eb:SetScript("OnEnterPressed", function(self) eb:ClearFocus() end)
+	eb:SetScript("OnEscapePressed", function(self) eb:ClearFocus() end)
 	EventRegistry:RegisterCallback("TTOM.OnReset", function()
 		eb:SetText(TTOMDB[key])
 		eb:SetTextColor(1, 1, 1, 1)
 	end)
 	return eb
+end
+
+local function getNumber(editBox, current)
+	local number = current
+	local text = editBox:GetText()
+	if tonumber(text) then
+		number = text
+		editBox:SetTextColor(1, 1, 1, 1)
+	else
+		editBox:SetTextColor(1, 0.5, 0.5, 1)
+	end
+	return number
 end
 
 local function createButton(parent, text)
@@ -81,19 +95,9 @@ function TTOM:InitializeOptions()
 	local xEdit, yEdit
 	xEdit = createEditBox(self.options, TTOMDB.x, "x")
 	xEdit:SetPoint("TOPLEFT", 16, -16)
-	xEdit:SetScript("OnEnterPressed", function(self) xEdit:ClearFocus() end)
-	xEdit:SetScript("OnEscapePressed", function(self) xEdit:ClearFocus() end)
 	xEdit:SetScript("OnTabPressed", function(self) yEdit:SetFocus() end)
 	xEdit:SetScript("OnTextChanged", function(self, user)
-		if user then
-			local text = self:GetText()
-			if tonumber(text) then
-				TTOMDB.x = text
-				xEdit:SetTextColor(1, 1, 1, 1)
-			else
-				xEdit:SetTextColor(1, 0.5, 0.5, 1)
-			end
-		end
+		if user then TTOMDB.x = getNumber(xEdit, TTOMDB.x) end
 	end)
 
 	local xLabel = createFontString(self.options, "X Offset")
@@ -101,19 +105,9 @@ function TTOM:InitializeOptions()
 
 	yEdit = createEditBox(self.options, TTOMDB.y, "y")
 	yEdit:SetPoint("TOPLEFT", xEdit, "BOTTOMLEFT", 0, -16)
-	yEdit:SetScript("OnEnterPressed", function(self) yEdit:ClearFocus() end)
-	yEdit:SetScript("OnEscapePressed", function(self) yEdit:ClearFocus() end)
 	yEdit:SetScript("OnTabPressed", function(self) xEdit:SetFocus() end)
 	yEdit:SetScript("OnTextChanged", function(self, user)
-		if user then
-			local text = self:GetText()
-			if tonumber(text) then
-				TTOMDB.y = text
-				yEdit:SetTextColor(1, 1, 1, 1)
-			else
-				yEdit:SetTextColor(1, 0.5, 0.5, 1)
-			end
-		end
+		if user then TTOMDB.y = getNumber(yEdit, TTOMDB.y) end
 	end)
 
 	local yLabel = createFontString(self.options, "Y Offset")
