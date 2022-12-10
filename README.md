@@ -13,5 +13,5 @@ World of Warcraft addon: Attach tooltip to mouse, with anchor and offset.
 
 ## Thanks
 
-- <https://curseforge.com/wow/addons/tooltiponmouse>
+- <https://github.com/boktai1000/TooltipOnMouse>
 - <https://github.com/ketho-wow/HelloWorld>
