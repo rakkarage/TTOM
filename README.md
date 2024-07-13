@@ -1,4 +1,4 @@
-# TTOM: ToolTip On Mouse
+# 💬 ToolTip On Mouse
 
 ![Options Screenshot](TTOM.png)
 

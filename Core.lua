@@ -1,6 +1,6 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
-TTOM.notes = "ToolTip On Mouse"
+TTOM.title = "ToolTip On Mouse"
 TTOM.defaults = {x = "32", y = "-32", anchor = "TOPLEFT"}
 TTOM.tooltips = {}
 
@@ -73,5 +73,5 @@ end)
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
 SlashCmdList["TTOM"] = function(msg, editFrame, noOutput)
-	InterfaceOptionsFrame_OpenToCategory(TTOM.notes)
+	InterfaceOptionsFrame_OpenToCategory(TTOM.title)
 end
