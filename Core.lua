@@ -1,12 +1,13 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
 TTOM.title = "ToolTip On Mouse"
-TTOM.defaults = {x = "32", y = "-32", anchor = "TOPLEFT"}
+TTOM.defaults = { x = "32", y = "-32", anchor = "TOPLEFT" }
 TTOM.tooltips = {}
 
 function TTOM:OnEvent(event, ...)
 	self[event](self, event, ...)
 end
+
 TTOM:SetScript("OnEvent", TTOM.OnEvent)
 TTOM:RegisterEvent("ADDON_LOADED")
 
@@ -73,5 +74,5 @@ end)
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
 SlashCmdList["TTOM"] = function(msg, editFrame, noOutput)
-	InterfaceOptionsFrame_OpenToCategory(TTOM.title)
+	Settings.OpenToCategory(TTOM.title)
 end
