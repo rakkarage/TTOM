@@ -2,7 +2,7 @@
 ## Version: v2024.1
 ## Title: ToolTip On Mouse
 ## Notes: Attach tooltip to mouse, with anchor and offset.
-## Author: egingell, rakkarage@gmail.com
+## Author: egingell, rakkarage
 ## SavedVariables: TTOMDB
 ## IconTexture: Interface\AddOns\TTOM\icon.png
 
