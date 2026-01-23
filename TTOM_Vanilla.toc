@@ -1,5 +1,5 @@
-## Interface: 11501
-## Version: v2024.0
+## Interface: 11505
+## Version: v2026
 ## Title: ToolTip On Mouse
 ## Notes: Attach tooltip to mouse, with anchor and offset.
 ## Author: egingell, rakkarage@gmail.com
