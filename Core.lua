@@ -1,7 +1,7 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
 TTOM.title = "ToolTip On Mouse"
-TTOM.defaults = { x = "32", y = "-32", anchor = "TOPLEFT" }
+TTOM.defaults = { x = "32", y = "-32", anchor = "TOPLEFT", combat = false }
 TTOM.tooltips = {}
 
 function TTOM:OnEvent(event, ...)
@@ -26,6 +26,13 @@ end
 
 local function updateTooltip(tooltip)
 	if not tooltip.update then return end
+
+	if not TTOMDB.combat and InCombatLockdown() then
+		tooltip:ClearAllPoints()
+		tooltip:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
+		return
+	end
+
 	local scale = UIParent:GetEffectiveScale()
 	local mX, mY = GetCursorPosition()
 	mX, mY = mX / scale + TTOMDB.x, mY / scale + TTOMDB.y
@@ -74,5 +81,5 @@ end)
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
 SlashCmdList["TTOM"] = function(msg, editFrame, noOutput)
-	Settings.OpenToCategory(TTOM.title)
+	Settings.OpenToCategory(TTOM.category:GetID())
 end

@@ -19,6 +19,19 @@ local function createEditBox(parent, text, key)
 	return eb
 end
 
+local function createCheckbox(parent, text, key)
+	local cb = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+	cb.Text:SetText(text)
+	cb:SetChecked(TTOMDB[key])
+	cb:SetScript("OnClick", function(self)
+		TTOMDB[key] = self:GetChecked()
+	end)
+	EventRegistry:RegisterCallback("TTOM.OnReset", function()
+		cb:SetChecked(TTOMDB[key])
+	end)
+	return cb
+end
+
 local function getNumber(editBox, current)
 	local number = current
 	local text = editBox:GetText()
@@ -77,9 +90,8 @@ end
 function TTOM:InitializeOptions()
 	self.options = CreateFrame("Frame")
 	self.options.name = TTOM.title
-	local category = Settings.RegisterCanvasLayoutCategory(self.options, TTOM.title)
-	category.ID = TTOM.title
-	Settings.RegisterAddOnCategory(category)
+	TTOM.category = Settings.RegisterCanvasLayoutCategory(self.options, TTOM.title)
+	Settings.RegisterAddOnCategory(TTOM.category)
 
 	local xEdit, yEdit
 	xEdit = createEditBox(self.options, TTOMDB.x, "x")
@@ -107,6 +119,9 @@ function TTOM:InitializeOptions()
 
 	local anchorLabel = createFontString(self.options, "Anchor")
 	anchorLabel:SetPoint("LEFT", anchor, "RIGHT", 10, 0)
+
+	local combatCheck = createCheckbox(self.options, "Follow Mouse in Combat", "combat")
+	combatCheck:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 5, -16)
 
 	local reset = createButton(self.options, "Reset")
 	reset:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 16, -16)

@@ -10,3 +10,6 @@
 - v2024.0
   - new icon
   - changed category text
+- v2026
+  - fix category and name
+  - add combat option

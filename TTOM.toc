@@ -1,6 +1,7 @@
 ## Interface: 120000
 ## Version: v2026
-## Title: ToolTip On Mouse
+## Title: ToolTip On Mouse (TTOM)
+## Category: User Interface
 ## Notes: Attach tooltip to mouse, with anchor and offset.
 ## Author: egingell, rakkarage
 ## SavedVariables: TTOMDB
