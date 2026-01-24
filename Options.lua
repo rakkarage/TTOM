@@ -120,11 +120,11 @@ function TTOM:InitializeOptions()
 	local anchorLabel = createFontString(self.options, "Anchor")
 	anchorLabel:SetPoint("LEFT", anchor, "RIGHT", 10, 0)
 
-	local combatCheck = createCheckbox(self.options, "Follow Mouse in Combat", "combat")
+	local combatCheck = createCheckbox(self.options, "Active in combat", "combat")
 	combatCheck:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 5, -16)
 
 	local reset = createButton(self.options, "Reset")
-	reset:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 16, -16)
+	reset:SetPoint("TOPLEFT", combatCheck, "BOTTOMLEFT", 16, -16)
 	reset:SetScript("OnClick", function()
 		TTOMDB = CopyTable(TTOM.defaults)
 		EventRegistry:TriggerEvent("TTOM.OnReset")
