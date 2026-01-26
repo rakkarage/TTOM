@@ -15,7 +15,7 @@ function TTOM:ADDON_LOADED(event, name)
 	if name == TTOM.name then
 		TTOMDB = TTOMDB or {}
 		for key, value in pairs(self.defaults) do
-			if not TTOMDB[key] then
+			if TTOMDB[key] == nil then
 				TTOMDB[key] = value
 			end
 		end
@@ -27,15 +27,12 @@ end
 local function updateTooltip(tooltip)
 	if not tooltip.update then return end
 
-	if not TTOMDB.combat and InCombatLockdown() then
-		tooltip:ClearAllPoints()
-		tooltip:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
-		return
-	end
+	if not TTOMDB.combat and InCombatLockdown() then return end
 
 	local scale = UIParent:GetEffectiveScale()
 	local mX, mY = GetCursorPosition()
-	mX, mY = mX / scale + TTOMDB.x, mY / scale + TTOMDB.y
+	mX = mX / scale + (tonumber(TTOMDB.x) or 32)
+	mY = mY / scale + (tonumber(TTOMDB.y) or -32)
 	if TTOMDB.anchor == "TOPLEFT" then
 		mY = mY - tooltip:GetHeight()
 	elseif TTOMDB.anchor == "TOPRIGHT" then
@@ -62,6 +59,8 @@ local function updateTooltip(tooltip)
 end
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+	if not TTOMDB.combat and InCombatLockdown() then return end
+
 	if parent.unit then
 		tooltip:SetOwner(parent, "ANCHOR_PRESERVE")
 	else
@@ -69,8 +68,8 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	end
 	updateTooltip(tooltip)
 	tooltip.update = true
-	if not TTOM.tooltips[tostring(tooltip)] then
-		TTOM.tooltips[tostring(tooltip)] = true
+	if not TTOM.tooltips[tooltip] then
+		TTOM.tooltips[tooltip] = true
 		tooltip:HookScript("OnUpdate", updateTooltip)
 		tooltip:HookScript("OnHide", function()
 			tooltip.update = false
@@ -81,5 +80,9 @@ end)
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
 SlashCmdList["TTOM"] = function(msg, editFrame, noOutput)
+	if InCombatLockdown() then
+		print("TTOM: Cannot open settings while in combat!")
+		return
+	end
 	Settings.OpenToCategory(TTOM.category:GetID())
 end
