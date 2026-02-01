@@ -26,36 +26,44 @@ end
 
 local function updateTooltip(tooltip)
 	if not tooltip.update then return end
-
 	if not TTOMDB.combat and InCombatLockdown() then return end
-
-	local scale = UIParent:GetEffectiveScale()
-	local mX, mY = GetCursorPosition()
-	mX = mX / scale + (tonumber(TTOMDB.x) or 32)
-	mY = mY / scale + (tonumber(TTOMDB.y) or -32)
-	if TTOMDB.anchor == "TOPLEFT" then
-		mY = mY - tooltip:GetHeight()
-	elseif TTOMDB.anchor == "TOPRIGHT" then
-		mX = mX - tooltip:GetWidth()
-		mY = mY - tooltip:GetHeight()
-	elseif TTOMDB.anchor == "BOTTOMRIGHT" then
-		mX = mX - tooltip:GetWidth()
-	elseif TTOMDB.anchor == "TOP" then
-		mX = mX - tooltip:GetWidth() / 2
-		mY = mY - tooltip:GetHeight()
-	elseif TTOMDB.anchor == "BOTTOM" then
-		mX = mX - tooltip:GetWidth() / 2
-	elseif TTOMDB.anchor == "LEFT" then
-		mY = mY - tooltip:GetHeight() / 2
-	elseif TTOMDB.anchor == "RIGHT" then
-		mX = mX - tooltip:GetWidth()
-		mY = mY - tooltip:GetHeight() / 2
-	elseif TTOMDB.anchor == "CENTER" then
-		mX = mX - tooltip:GetWidth() / 2
-		mY = mY - tooltip:GetHeight() / 2
-	end
+	
+	local success, x, y = pcall(function()
+		local w = tooltip:GetWidth()
+		local h = tooltip:GetHeight()
+		local scale = UIParent:GetEffectiveScale()
+		local cursorX, cursorY = GetCursorPosition()
+		local x = cursorX / scale + (tonumber(TTOMDB.x) or 32)
+		local y = cursorY / scale + (tonumber(TTOMDB.y) or -32)
+		
+		if TTOMDB.anchor == "TOPLEFT" then
+			y = y - h
+		elseif TTOMDB.anchor == "TOPRIGHT" then
+			x = x - w
+			y = y - h
+		elseif TTOMDB.anchor == "BOTTOMRIGHT" then
+			x = x - w
+		elseif TTOMDB.anchor == "TOP" then
+			x = x - w / 2
+			y = y - h
+		elseif TTOMDB.anchor == "BOTTOM" then
+			x = x - w / 2
+		elseif TTOMDB.anchor == "LEFT" then
+			y = y - h / 2
+		elseif TTOMDB.anchor == "RIGHT" then
+			x = x - w
+			y = y - h / 2
+		elseif TTOMDB.anchor == "CENTER" then
+			x = x - w / 2
+			y = y - h / 2
+		end
+		
+		return x, y
+	end)
+	if not success then return end
+	
 	tooltip:ClearAllPoints()
-	tooltip:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", mX, mY)
+	tooltip:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", x, y)
 end
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
