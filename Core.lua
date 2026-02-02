@@ -1,6 +1,5 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
-TTOM.title = "ToolTip On Mouse"
 TTOM.defaults = { x = "32", y = "-32", anchor = "TOPLEFT", combat = true }
 TTOM.tooltips = {}
 
@@ -24,7 +23,7 @@ function TTOM:ADDON_LOADED(event, name)
 	end
 end
 
-local function updateTooltip(tooltip)
+local function TTOM_UpdateTooltip(tooltip)
 	if not tooltip.update then return end
 	if not TTOMDB.combat and InCombatLockdown() then return end
 	
@@ -74,11 +73,11 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	else
 		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 	end
-	updateTooltip(tooltip)
+	TTOM_UpdateTooltip(tooltip)
 	tooltip.update = true
 	if not TTOM.tooltips[tooltip] then
 		TTOM.tooltips[tooltip] = true
-		tooltip:HookScript("OnUpdate", updateTooltip)
+		tooltip:HookScript("OnUpdate", TTOM_UpdateTooltip)
 		tooltip:HookScript("OnHide", function()
 			tooltip.update = false
 		end)
@@ -88,9 +87,19 @@ end)
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
 SlashCmdList["TTOM"] = function(msg, editFrame, noOutput)
-	if InCombatLockdown() then
-		print("TTOM: Cannot open settings while in combat!")
-		return
+	TTOM_Settings()
+end
+
+function TTOM_AddonCompartmentClick(addonName, buttonName, menuButtonFrame)
+	if addonName == "TTOM" then
+		TTOM_Settings()
 	end
-	Settings.OpenToCategory(TTOM.category:GetID())
+end
+
+function TTOM_Settings()
+	if not InCombatLockdown() then
+		Settings.OpenToCategory(TTOM.category:GetID())
+	else
+		print("TTOM: Cannot open settings while in combat!")
+	end
 end

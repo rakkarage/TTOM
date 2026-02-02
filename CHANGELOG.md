@@ -13,3 +13,4 @@
 - v2026
   - fix category and name
   - add combat option
+  - addon compartment support

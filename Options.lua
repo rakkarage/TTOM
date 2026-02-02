@@ -89,8 +89,8 @@ end
 
 function TTOM:InitializeOptions()
 	self.options = CreateFrame("Frame")
-	self.options.name = TTOM.title
-	TTOM.category = Settings.RegisterCanvasLayoutCategory(self.options, TTOM.title)
+	self.options.name = TTOM.name
+	TTOM.category = Settings.RegisterCanvasLayoutCategory(self.options, TTOM.name)
 	Settings.RegisterAddOnCategory(TTOM.category)
 
 	local xEdit, yEdit

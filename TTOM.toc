@@ -1,10 +1,11 @@
 ## Interface: 120000
 ## Version: v2026
-## Title: ToolTip On Mouse (TTOM)
+## Title: TTOM
 ## Category: User Interface
-## Notes: Attach tooltip to mouse, with anchor and offset.
+## Notes: Attach tooltip to mouse, with anchor and offset. ToolTip On Mouse. ToolTipOnMouse.
 ## Author: egingell, rakkarage
 ## SavedVariables: TTOMDB
+## AddonCompartmentFunc: TTOM_AddonCompartmentClick
 ## IconTexture: Interface/AddOns/TTOM/icon.png
 
 Core.lua
