@@ -10,8 +10,8 @@ local function createEditBox(parent, text, key)
 	eb:SetText(text)
 	eb:SetCursorPosition(0)
 	eb:SetAutoFocus(false)
-	eb:SetScript("OnEnterPressed", function(self) eb:ClearFocus() end)
-	eb:SetScript("OnEscapePressed", function(self) eb:ClearFocus() end)
+	eb:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+	eb:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
 	EventRegistry:RegisterCallback("TTOM.OnReset", function()
 		eb:SetText(TTOMDB[key])
 		eb:SetTextColor(1, 1, 1, 1)
@@ -33,15 +33,14 @@ local function createCheckbox(parent, text, key)
 end
 
 local function getNumber(editBox, current)
-	local number = current
 	local text = editBox:GetText()
 	if tonumber(text) then
-		number = text
 		editBox:SetTextColor(1, 1, 1, 1)
+		return text
 	else
 		editBox:SetTextColor(1, 0.5, 0.5, 1)
+		return current
 	end
-	return number
 end
 
 local function createButton(parent, text)
@@ -98,7 +97,7 @@ function TTOM:InitializeOptions()
 	xEdit:SetPoint("TOPLEFT", 16, -16)
 	xEdit:SetScript("OnTabPressed", function(self) yEdit:SetFocus() end)
 	xEdit:SetScript("OnTextChanged", function(self, user)
-		if user then TTOMDB.x = getNumber(xEdit, TTOMDB.x) end
+		if user then TTOMDB.x = getNumber(self, TTOMDB.x) end
 	end)
 
 	local xLabel = createFontString(self.options, "X Offset")
@@ -108,7 +107,7 @@ function TTOM:InitializeOptions()
 	yEdit:SetPoint("TOPLEFT", xEdit, "BOTTOMLEFT", 0, -16)
 	yEdit:SetScript("OnTabPressed", function(self) xEdit:SetFocus() end)
 	yEdit:SetScript("OnTextChanged", function(self, user)
-		if user then TTOMDB.y = getNumber(yEdit, TTOMDB.y) end
+		if user then TTOMDB.y = getNumber(self, TTOMDB.y) end
 	end)
 
 	local yLabel = createFontString(self.options, "Y Offset")
@@ -125,7 +124,7 @@ function TTOM:InitializeOptions()
 
 	local reset = createButton(self.options, "Reset")
 	reset:SetPoint("TOPLEFT", combatCheck, "BOTTOMLEFT", 16, -16)
-	reset:SetScript("OnClick", function()
+	reset:SetScript("OnClick", function(self)
 		TTOMDB = CopyTable(TTOM.defaults)
 		EventRegistry:TriggerEvent("TTOM.OnReset")
 	end)

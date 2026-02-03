@@ -35,24 +35,25 @@ local function TTOM_UpdateTooltip(tooltip)
 		local x = cursorX / scale + (tonumber(TTOMDB.x) or 32)
 		local y = cursorY / scale + (tonumber(TTOMDB.y) or -32)
 		
-		if TTOMDB.anchor == "TOPLEFT" then
+		local anchor = TTOMDB.anchor
+		if anchor == "TOPLEFT" then
 			y = y - h
-		elseif TTOMDB.anchor == "TOPRIGHT" then
+		elseif anchor == "TOPRIGHT" then
 			x = x - w
 			y = y - h
-		elseif TTOMDB.anchor == "BOTTOMRIGHT" then
+		elseif anchor == "BOTTOMRIGHT" then
 			x = x - w
-		elseif TTOMDB.anchor == "TOP" then
+		elseif anchor == "TOP" then
 			x = x - w / 2
 			y = y - h
-		elseif TTOMDB.anchor == "BOTTOM" then
+		elseif anchor == "BOTTOM" then
 			x = x - w / 2
-		elseif TTOMDB.anchor == "LEFT" then
+		elseif anchor == "LEFT" then
 			y = y - h / 2
-		elseif TTOMDB.anchor == "RIGHT" then
+		elseif anchor == "RIGHT" then
 			x = x - w
 			y = y - h / 2
-		elseif TTOMDB.anchor == "CENTER" then
+		elseif anchor == "CENTER" then
 			x = x - w / 2
 			y = y - h / 2
 		end
@@ -62,20 +63,23 @@ local function TTOM_UpdateTooltip(tooltip)
 	if not success then return end
 	
 	tooltip:ClearAllPoints()
-	tooltip:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", x, y)
+	tooltip:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
 end
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	if not TTOMDB.combat and InCombatLockdown() then return end
 
-	if parent.unit then
-		tooltip:SetOwner(parent, "ANCHOR_PRESERVE")
-	else
-		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
-	end
+	tooltip.update = pcall(function()
+		if parent and parent.unit then
+			tooltip:SetOwner(parent, "ANCHOR_PRESERVE")
+		else
+			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
+		end
+	end)
+
 	TTOM_UpdateTooltip(tooltip)
-	tooltip.update = true
-	if not TTOM.tooltips[tooltip] then
+
+	if tooltip.update and not TTOM.tooltips[tooltip] then
 		TTOM.tooltips[tooltip] = true
 		tooltip:HookScript("OnUpdate", TTOM_UpdateTooltip)
 		tooltip:HookScript("OnHide", function()
