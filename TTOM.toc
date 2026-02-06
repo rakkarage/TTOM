@@ -6,7 +6,6 @@
 ## Author: egingell, rakkarage
 ## SavedVariables: TTOMDB
 ## AddonCompartmentFunc: TTOM_AddonCompartmentClick
-## IconTexture: Interface/AddOns/TTOM/icon.png
+## IconTexture: Interface/AddOns/TTOM/TTOM.png
 
-Core.lua
-Options.lua
+TTOM.lua

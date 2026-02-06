@@ -1,6 +1,6 @@
 # 💬 ToolTip On Mouse
 
-![Options Screenshot](TTOM.png)
+![Options Screenshot](screenshot.png)
 
 World of Warcraft addon: Attach tooltip to mouse, with anchor and offset.
 
