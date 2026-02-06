@@ -1,6 +1,6 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
-TTOM.defaults = { x = "32", y = "-32", anchor = "TOPLEFT", combat = true }
+TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
 TTOM.tooltips = {}
 
 function TTOM:OnEvent(event, ...)
