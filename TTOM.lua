@@ -23,10 +23,22 @@ function TTOM:ADDON_LOADED(event, name)
 	end
 end
 
+local anchorOffsets = {
+	TOPLEFT     = function(w, h) return 0, -h end,
+	TOPRIGHT    = function(w, h) return -w, -h end,
+	BOTTOMLEFT  = function(w, h) return 0, 0 end,
+	BOTTOMRIGHT = function(w, h) return -w, 0 end,
+	TOP         = function(w, h) return -w/2, -h end,
+	BOTTOM      = function(w, h) return -w/2, 0 end,
+	LEFT        = function(w, h) return 0, -h/2 end,
+	RIGHT       = function(w, h) return -w, -h/2 end,
+	CENTER      = function(w, h) return -w/2, -h/2 end,
+}
+
 local function TTOM_UpdateTooltip(tooltip)
 	if not tooltip.update then return end
 	if not TTOMDB.combat and InCombatLockdown() then return end
-	
+
 	local success, x, y = pcall(function()
 		local w = tooltip:GetWidth()
 		local h = tooltip:GetHeight()
@@ -34,34 +46,15 @@ local function TTOM_UpdateTooltip(tooltip)
 		local cursorX, cursorY = GetCursorPosition()
 		local x = cursorX / scale + (tonumber(TTOMDB.x) or 32)
 		local y = cursorY / scale + (tonumber(TTOMDB.y) or -32)
-		
-		local anchor = TTOMDB.anchor
-		if anchor == "TOPLEFT" then
-			y = y - h
-		elseif anchor == "TOPRIGHT" then
-			x = x - w
-			y = y - h
-		elseif anchor == "BOTTOMRIGHT" then
-			x = x - w
-		elseif anchor == "TOP" then
-			x = x - w / 2
-			y = y - h
-		elseif anchor == "BOTTOM" then
-			x = x - w / 2
-		elseif anchor == "LEFT" then
-			y = y - h / 2
-		elseif anchor == "RIGHT" then
-			x = x - w
-			y = y - h / 2
-		elseif anchor == "CENTER" then
-			x = x - w / 2
-			y = y - h / 2
-		end
-		
+		local offsetFunc = anchorOffsets[TTOMDB.anchor] or anchorOffsets.TOPLEFT
+		local offsetX, offsetY = offsetFunc(w, h)
+		x = x + offsetX
+		y = y + offsetY
+
 		return x, y
 	end)
 	if not success then return end
-	
+
 	tooltip:ClearAllPoints()
 	tooltip:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
 end
