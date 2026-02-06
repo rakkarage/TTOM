@@ -112,15 +112,15 @@ function TTOM:InitializeOptions()
 	end)
 
 	Settings.CreateSlider(category,
-		Settings.RegisterAddOnSetting(category, "X", "x", TTOMDB, Settings.VarType.Number, "X Offset", TTOM.defaults.x),
+		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset", TTOM.defaults.x),
 		sliderOptions, "Horizontal offset from cursor position")
 
 	Settings.CreateSlider(category,
-		Settings.RegisterAddOnSetting(category, "Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset", TTOM.defaults.y),
+		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset", TTOM.defaults.y),
 		sliderOptions, "Vertical offset from cursor position")
 
 	Settings.CreateDropdown(category,
-		Settings.RegisterAddOnSetting(category, "Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point", TTOM.defaults.anchor),
+		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point", TTOM.defaults.anchor),
 		function()
 			local container = Settings.CreateControlTextContainer()
 			for anchor, text in pairs({
@@ -135,5 +135,5 @@ function TTOM:InitializeOptions()
 		"Tooltip anchor point relative to cursor")
 
 	Settings.CreateCheckbox(category,
-		Settings.RegisterAddOnSetting(category, "Combat", "combat", TTOMDB, Settings.VarType.Boolean, "Allow in combat", TTOM.defaults.combat))
+		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean, "Allow in combat", TTOM.defaults.combat))
 end
