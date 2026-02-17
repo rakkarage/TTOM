@@ -83,7 +83,7 @@ end)
 
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
-SlashCmdList["TTOM"] = TTOM_Settings()
+SlashCmdList["TTOM"] = TTOM_Settings
 
 function TTOM_AddonCompartmentClick(addonName, buttonName, menuButtonFrame)
 	if addonName == "TTOM" then
