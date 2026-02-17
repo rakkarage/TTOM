@@ -28,11 +28,11 @@ local anchorOffsets = {
 	TOPRIGHT    = function(w, h) return -w, -h end,
 	BOTTOMLEFT  = function(w, h) return 0, 0 end,
 	BOTTOMRIGHT = function(w, h) return -w, 0 end,
-	TOP         = function(w, h) return -w/2, -h end,
-	BOTTOM      = function(w, h) return -w/2, 0 end,
-	LEFT        = function(w, h) return 0, -h/2 end,
-	RIGHT       = function(w, h) return -w, -h/2 end,
-	CENTER      = function(w, h) return -w/2, -h/2 end,
+	TOP         = function(w, h) return -w / 2, -h end,
+	BOTTOM      = function(w, h) return -w / 2, 0 end,
+	LEFT        = function(w, h) return 0, -h / 2 end,
+	RIGHT       = function(w, h) return -w, -h / 2 end,
+	CENTER      = function(w, h) return -w / 2, -h / 2 end,
 }
 
 local function TTOM_UpdateTooltip(tooltip)
@@ -83,9 +83,7 @@ end)
 
 SLASH_TTOM1 = "/ttom"
 SLASH_TTOM2 = "/tooltiponmouse"
-SlashCmdList["TTOM"] = function(msg, editFrame, noOutput)
-	TTOM_Settings()
-end
+SlashCmdList["TTOM"] = TTOM_Settings()
 
 function TTOM_AddonCompartmentClick(addonName, buttonName, menuButtonFrame)
 	if addonName == "TTOM" then
@@ -96,8 +94,6 @@ end
 function TTOM_Settings()
 	if not InCombatLockdown() then
 		Settings.OpenToCategory(TTOM.category:GetID())
-	else
-		print("TTOM: Cannot open settings while in combat!")
 	end
 end
 
@@ -112,15 +108,18 @@ function TTOM:InitializeOptions()
 	end)
 
 	Settings.CreateSlider(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset", TTOM.defaults.x),
+		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset",
+			TTOM.defaults.x),
 		sliderOptions, "Horizontal offset from cursor position")
 
 	Settings.CreateSlider(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset", TTOM.defaults.y),
+		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset",
+			TTOM.defaults.y),
 		sliderOptions, "Vertical offset from cursor position")
 
 	Settings.CreateDropdown(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point", TTOM.defaults.anchor),
+		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point",
+			TTOM.defaults.anchor),
 		function()
 			local container = Settings.CreateControlTextContainer()
 			for anchor, text in pairs({
@@ -135,5 +134,6 @@ function TTOM:InitializeOptions()
 		"Tooltip anchor point relative to cursor")
 
 	Settings.CreateCheckbox(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean, "Allow in combat", TTOM.defaults.combat))
+		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean,
+			"Allow in combat", TTOM.defaults.combat))
 end
