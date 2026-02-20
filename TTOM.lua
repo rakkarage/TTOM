@@ -63,11 +63,7 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	if not TTOMDB.combat and InCombatLockdown() then return end
 
 	tooltip.update = pcall(function()
-		if parent and parent.unit then
-			tooltip:SetOwner(parent, "ANCHOR_PRESERVE")
-		else
-			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
-		end
+		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 	end)
 
 	TTOM_UpdateTooltip(tooltip)
