@@ -4,7 +4,9 @@ TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
 TTOM.tooltips = {}
 
 function TTOM:OnEvent(event, ...)
-	self[event](self, event, ...)
+	if self[event] then
+		self[event](self, event, ...)
+	end
 end
 
 TTOM:SetScript("OnEvent", TTOM.OnEvent)
