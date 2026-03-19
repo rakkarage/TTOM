@@ -96,7 +96,7 @@ SLASH_TTOM2 = "/tooltiponmouse"
 SlashCmdList["TTOM"] = TTOM_Settings
 
 function TTOM:InitializeOptions()
-	local category, layout = Settings.RegisterVerticalLayoutCategory(TTOM.name)
+	local category = Settings.RegisterVerticalLayoutCategory(TTOM.name)
 	TTOM.category = category
 	Settings.RegisterAddOnCategory(category)
 
