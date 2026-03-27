@@ -1,7 +1,6 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
-TTOM.tooltips = {}
 
 function TTOM:OnEvent(event, ...)
 	if self[event] then
@@ -21,62 +20,28 @@ function TTOM:ADDON_LOADED(event, name)
 			end
 		end
 		self:InitializeOptions()
+		GameTooltip:HookScript("OnUpdate", function(self)
+			if InCombatLockdown() and not TTOMDB.combat then return end
+			TTOM:UpdateTooltipPosition(self)
+		end)
 		self:UnregisterEvent(event)
 	end
 end
 
-local anchorOffsets = {
-	TOPLEFT     = function(w, h) return 0, -h end,
-	TOPRIGHT    = function(w, h) return -w, -h end,
-	BOTTOMLEFT  = function(w, h) return 0, 0 end,
-	BOTTOMRIGHT = function(w, h) return -w, 0 end,
-	TOP         = function(w, h) return -w / 2, -h end,
-	BOTTOM      = function(w, h) return -w / 2, 0 end,
-	LEFT        = function(w, h) return 0, -h / 2 end,
-	RIGHT       = function(w, h) return -w, -h / 2 end,
-	CENTER      = function(w, h) return -w / 2, -h / 2 end,
-}
-
-local function TTOM_UpdateTooltip(tooltip)
-	if not tooltip.update then return end
-	if not TTOMDB.combat and InCombatLockdown() then return end
-
-	local success, x, y = pcall(function()
-		local w = tooltip:GetWidth()
-		local h = tooltip:GetHeight()
-		local scale = UIParent:GetEffectiveScale()
-		local cursorX, cursorY = GetCursorPosition()
-		local x = cursorX / scale + (tonumber(TTOMDB.x) or 32)
-		local y = cursorY / scale + (tonumber(TTOMDB.y) or -32)
-		local offsetFunc = anchorOffsets[TTOMDB.anchor] or anchorOffsets.TOPLEFT
-		local offsetX, offsetY = offsetFunc(w, h)
-		x = x + offsetX
-		y = y + offsetY
-
-		return x, y
-	end)
-	if not success then return end
-
+function TTOM:UpdateTooltipPosition(tooltip)
+	local cursorX, cursorY = GetCursorPosition()
+	local scale = UIParent:GetEffectiveScale()
+	local x = cursorX / scale + (tonumber(TTOMDB.x) or 32)
+	local y = cursorY / scale + (tonumber(TTOMDB.y) or -32)
 	tooltip:ClearAllPoints()
-	tooltip:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x, y)
+	tooltip:SetPoint(TTOMDB.anchor, UIParent, "BOTTOMLEFT", x, y)
 end
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-	if not TTOMDB.combat and InCombatLockdown() then return end
-
-	tooltip.update = pcall(function()
-		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
-	end)
-
-	TTOM_UpdateTooltip(tooltip)
-
-	if tooltip.update and not TTOM.tooltips[tooltip] then
-		TTOM.tooltips[tooltip] = true
-		tooltip:HookScript("OnUpdate", TTOM_UpdateTooltip)
-		tooltip:HookScript("OnHide", function()
-			tooltip.update = false
-		end)
+	if InCombatLockdown() and not TTOMDB.combat then
+		return
 	end
+	TTOM:UpdateTooltipPosition(tooltip)
 end)
 
 function TTOM_Settings()
