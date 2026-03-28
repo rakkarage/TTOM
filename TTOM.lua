@@ -2,6 +2,8 @@ TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
 
+local usingDefaultAnchor = false
+
 function TTOM:OnEvent(event, ...)
 	if self[event] then
 		self[event](self, event, ...)
@@ -20,10 +22,23 @@ function TTOM:ADDON_LOADED(event, name)
 			end
 		end
 		self:InitializeOptions()
+
+		hooksecurefunc(GameTooltip, "SetOwner", function(self, owner, anchor)
+			if anchor ~= "ANCHOR_NONE" then
+				usingDefaultAnchor = false
+			end
+		end)
+
 		GameTooltip:HookScript("OnUpdate", function(self)
+			if not usingDefaultAnchor then return end
 			if InCombatLockdown() and not TTOMDB.combat then return end
 			TTOM:UpdateTooltipPosition(self)
 		end)
+
+		GameTooltip:HookScript("OnHide", function(self)
+			usingDefaultAnchor = false
+		end)
+
 		self:UnregisterEvent(event)
 	end
 end
@@ -38,9 +53,9 @@ function TTOM:UpdateTooltipPosition(tooltip)
 end
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-	if InCombatLockdown() and not TTOMDB.combat then
-		return
-	end
+	if not TTOMDB then return end
+	usingDefaultAnchor = true
+	if InCombatLockdown() and not TTOMDB.combat then return end
 	TTOM:UpdateTooltipPosition(tooltip)
 end)
 
@@ -65,7 +80,7 @@ function TTOM:InitializeOptions()
 	TTOM.category = category
 	Settings.RegisterAddOnCategory(category)
 
-	local sliderOptions = Settings.CreateSliderOptions(-64, 64, 8)
+	local sliderOptions = Settings.CreateSliderOptions(-200, 200, 4)
 	sliderOptions:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value)
 		return string.format("%d", value)
 	end)
