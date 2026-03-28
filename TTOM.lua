@@ -2,13 +2,14 @@ TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
 
-local usingDefaultAnchor = false
+local isTrackingTooltip = false
 
 function TTOM:UpdateTooltipPosition(tooltip)
+	if not TTOMDB then return end
 	local cursorX, cursorY = GetCursorPosition()
 	local scale = UIParent:GetEffectiveScale()
-	local x = cursorX / scale + (tonumber(TTOMDB.x) or 32)
-	local y = cursorY / scale + (tonumber(TTOMDB.y) or -32)
+	local x = cursorX / scale + (tonumber(TTOMDB.x) or self.defaults.x)
+	local y = cursorY / scale + (tonumber(TTOMDB.y) or self.defaults.y)
 	tooltip:ClearAllPoints()
 	tooltip:SetPoint(TTOMDB.anchor, UIParent, "BOTTOMLEFT", x, y)
 end
@@ -68,20 +69,27 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:InitializeOptions()
 
-		hooksecurefunc(GameTooltip, "SetOwner", function(_, _, anchor)
-			if anchor ~= "ANCHOR_NONE" then
-				usingDefaultAnchor = false
+		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
+			if InCombatLockdown() and not TTOMDB.combat then
+				isTrackingTooltip = false
+				return
 			end
+
+			isTrackingTooltip = true
+			TTOM:UpdateTooltipPosition(tooltip)
 		end)
 
 		GameTooltip:HookScript("OnUpdate", function(tooltip)
-			if not usingDefaultAnchor then return end
-			if InCombatLockdown() and not TTOMDB.combat then return end
+			if not isTrackingTooltip then return end
+			if InCombatLockdown() and not TTOMDB.combat then
+				isTrackingTooltip = false
+				return
+			end
 			TTOM:UpdateTooltipPosition(tooltip)
 		end)
 
 		GameTooltip:HookScript("OnHide", function()
-			usingDefaultAnchor = false
+			isTrackingTooltip = false
 		end)
 
 		self:UnregisterEvent(event)
@@ -90,13 +98,6 @@ end
 
 TTOM:SetScript("OnEvent", TTOM.OnEvent)
 TTOM:RegisterEvent("ADDON_LOADED")
-
-hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
-	if not TTOMDB then return end
-	usingDefaultAnchor = true
-	if InCombatLockdown() and not TTOMDB.combat then return end
-	TTOM:UpdateTooltipPosition(tooltip)
-end)
 
 function TTOM_Settings()
 	if not InCombatLockdown() then
