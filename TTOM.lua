@@ -91,7 +91,7 @@ end
 TTOM:SetScript("OnEvent", TTOM.OnEvent)
 TTOM:RegisterEvent("ADDON_LOADED")
 
-hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, _)
+hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
 	if not TTOMDB then return end
 	usingDefaultAnchor = true
 	if InCombatLockdown() and not TTOMDB.combat then return end
