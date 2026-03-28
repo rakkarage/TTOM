@@ -68,19 +68,19 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:InitializeOptions()
 
-		hooksecurefunc(GameTooltip, "SetOwner", function(self, owner, anchor)
+		hooksecurefunc(GameTooltip, "SetOwner", function(_, _, anchor)
 			if anchor ~= "ANCHOR_NONE" then
 				usingDefaultAnchor = false
 			end
 		end)
 
-		GameTooltip:HookScript("OnUpdate", function(self)
+		GameTooltip:HookScript("OnUpdate", function(tooltip)
 			if not usingDefaultAnchor then return end
 			if InCombatLockdown() and not TTOMDB.combat then return end
-			TTOM:UpdateTooltipPosition(self)
+			TTOM:UpdateTooltipPosition(tooltip)
 		end)
 
-		GameTooltip:HookScript("OnHide", function(self)
+		GameTooltip:HookScript("OnHide", function()
 			usingDefaultAnchor = false
 		end)
 
@@ -91,7 +91,7 @@ end
 TTOM:SetScript("OnEvent", TTOM.OnEvent)
 TTOM:RegisterEvent("ADDON_LOADED")
 
-hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, _)
 	if not TTOMDB then return end
 	usingDefaultAnchor = true
 	if InCombatLockdown() and not TTOMDB.combat then return end
@@ -101,12 +101,6 @@ end)
 function TTOM_Settings()
 	if not InCombatLockdown() then
 		Settings.OpenToCategory(TTOM.category:GetID())
-	end
-end
-
-function TTOM_AddonCompartmentClick(addonName, buttonName, menuButtonFrame)
-	if addonName == "TTOM" then
-		TTOM_Settings()
 	end
 end
 

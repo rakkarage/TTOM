@@ -5,7 +5,7 @@
 ## Notes: Attach tooltip to mouse, with anchor and offset. ToolTip On Mouse. ToolTipOnMouse.
 ## Author: egingell, rakkarage
 ## SavedVariables: TTOMDB
-## AddonCompartmentFunc: TTOM_AddonCompartmentClick
+## AddonCompartmentFunc: TTOM_Settings
 ## IconTexture: Interface/AddOns/TTOM/TTOM.png
 
 TTOM.lua
