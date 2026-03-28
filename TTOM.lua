@@ -21,6 +21,7 @@ function TTOM:ADDON_LOADED(event, name)
 				TTOMDB[key] = value
 			end
 		end
+
 		self:InitializeOptions()
 
 		hooksecurefunc(GameTooltip, "SetOwner", function(self, owner, anchor)
@@ -87,13 +88,11 @@ function TTOM:InitializeOptions()
 
 	Settings.CreateSlider(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset",
-			TTOM.defaults.x),
-		sliderOptions, "Horizontal offset from cursor position")
+			TTOM.defaults.x), sliderOptions, "Horizontal offset from cursor position")
 
 	Settings.CreateSlider(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset",
-			TTOM.defaults.y),
-		sliderOptions, "Vertical offset from cursor position")
+			TTOM.defaults.y), sliderOptions, "Vertical offset from cursor position")
 
 	Settings.CreateDropdown(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point",
@@ -108,8 +107,7 @@ function TTOM:InitializeOptions()
 				CENTER = "Center"
 			}) do container:Add(anchor, text) end
 			return container:GetData()
-		end,
-		"Tooltip anchor point relative to cursor")
+		end, "Tooltip anchor point relative to cursor")
 
 	Settings.CreateCheckbox(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean,
