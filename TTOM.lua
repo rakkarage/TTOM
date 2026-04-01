@@ -89,7 +89,7 @@ function TTOM:ADDON_LOADED(event, name)
 			end
 
 			isTrackingTooltip = true
-			TTOM:UpdateTooltipPosition(tooltip)
+			self:UpdateTooltipPosition(tooltip)
 		end)
 
 		GameTooltip:HookScript("OnUpdate", function(tooltip)
@@ -98,7 +98,7 @@ function TTOM:ADDON_LOADED(event, name)
 				isTrackingTooltip = false
 				return
 			end
-			TTOM:UpdateTooltipPosition(tooltip)
+			self:UpdateTooltipPosition(tooltip)
 		end)
 
 		GameTooltip:HookScript("OnHide", function()
