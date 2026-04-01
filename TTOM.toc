@@ -1,5 +1,5 @@
 ## Interface: 120001
-## Version: v2026.3
+## Version: v2026.4
 ## Title: TTOM
 ## Category: User Interface
 ## Notes: Attach tooltip to mouse, with anchor and offset. ToolTip On Mouse. ToolTipOnMouse.
