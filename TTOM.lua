@@ -5,18 +5,22 @@ TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
 local isTrackingTooltip = false
 
 function TTOM:UpdateTooltipPosition(tooltip)
-	if not TTOMDB then return end
+	local db = TTOMDB
+	if not db then return end
+
 	local cursorX, cursorY = GetCursorPosition()
 	local scale = UIParent:GetEffectiveScale()
-	local x = cursorX / scale + (tonumber(TTOMDB.x) or self.defaults.x)
-	local y = cursorY / scale + (tonumber(TTOMDB.y) or self.defaults.y)
+
+	local x = cursorX / scale + (tonumber(db.x) or self.defaults.x)
+	local y = cursorY / scale + (tonumber(db.y) or self.defaults.y)
+
 	tooltip:ClearAllPoints()
-	tooltip:SetPoint(TTOMDB.anchor, UIParent, "BOTTOMLEFT", x, y)
+	tooltip:SetPoint(db.anchor, UIParent, "BOTTOMLEFT", x, y)
 end
 
 function TTOM:InitializeOptions()
-	local category = Settings.RegisterVerticalLayoutCategory(TTOM.name)
-	TTOM.category = category
+	local category = Settings.RegisterVerticalLayoutCategory(self.name)
+	self.category = category
 	Settings.RegisterAddOnCategory(category)
 
 	local sliderOptions = Settings.CreateSliderOptions(-200, 200, 4)
@@ -26,30 +30,39 @@ function TTOM:InitializeOptions()
 
 	Settings.CreateSlider(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset",
-			TTOM.defaults.x), sliderOptions, "Horizontal offset from cursor position")
+			self.defaults.x), sliderOptions, "Horizontal offset from cursor position")
 
 	Settings.CreateSlider(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset",
-			TTOM.defaults.y), sliderOptions, "Vertical offset from cursor position")
+			self.defaults.y), sliderOptions, "Vertical offset from cursor position")
 
 	Settings.CreateDropdown(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point",
-			TTOM.defaults.anchor),
+			self.defaults.anchor),
 		function()
 			local container = Settings.CreateControlTextContainer()
-			for anchor, text in pairs({
-				TOPLEFT = "Top Left", TOPRIGHT = "Top Right",
-				BOTTOMLEFT = "Bottom Left", BOTTOMRIGHT = "Bottom Right",
-				TOP = "Top", BOTTOM = "Bottom",
-				LEFT = "Left", RIGHT = "Right",
-				CENTER = "Center"
-			}) do container:Add(anchor, text) end
+			local anchors = {
+				{ "TOPLEFT",     "Top Left" },
+				{ "TOP",         "Top" },
+				{ "TOPRIGHT",    "Top Right" },
+
+				{ "LEFT",        "Left" },
+				{ "CENTER",      "Center" },
+				{ "RIGHT",       "Right" },
+
+				{ "BOTTOMLEFT",  "Bottom Left" },
+				{ "BOTTOM",      "Bottom" },
+				{ "BOTTOMRIGHT", "Bottom Right" },
+			}
+			for _, entry in ipairs(anchors) do
+				container:Add(entry[1], entry[2])
+			end
 			return container:GetData()
 		end, "Tooltip anchor point relative to cursor")
 
 	Settings.CreateCheckbox(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean,
-			"Allow in combat", TTOM.defaults.combat))
+			"Allow in combat", self.defaults.combat))
 end
 
 function TTOM:OnEvent(event, ...)
@@ -59,7 +72,7 @@ function TTOM:OnEvent(event, ...)
 end
 
 function TTOM:ADDON_LOADED(event, name)
-	if name == TTOM.name then
+	if name == self.name then
 		TTOMDB = TTOMDB or {}
 		for key, value in pairs(self.defaults) do
 			if TTOMDB[key] == nil then
@@ -70,7 +83,7 @@ function TTOM:ADDON_LOADED(event, name)
 		self:InitializeOptions()
 
 		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
-			if InCombatLockdown() and not TTOMDB.combat then
+			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
 				isTrackingTooltip = false
 				return
 			end
@@ -81,7 +94,7 @@ function TTOM:ADDON_LOADED(event, name)
 
 		GameTooltip:HookScript("OnUpdate", function(tooltip)
 			if not isTrackingTooltip then return end
-			if InCombatLockdown() and not TTOMDB.combat then
+			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
 				isTrackingTooltip = false
 				return
 			end
