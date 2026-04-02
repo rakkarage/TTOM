@@ -87,7 +87,7 @@ function TTOM:ADDON_LOADED(event, name)
 				isTrackingTooltip = false
 				return
 			end
-			if parent ~= UIParent then
+			if parent == _G["OPieVisualElementsProxy"] then
 				isTrackingTooltip = false
 				return
 			end
