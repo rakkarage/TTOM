@@ -1,5 +1,5 @@
 TTOM = CreateFrame("Frame")
-TTOM.name = "TTOM"
+TTOM.name = ...
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true }
 
 local isTrackingTooltip = false
