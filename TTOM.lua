@@ -82,12 +82,15 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:InitializeOptions()
 
-		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
+		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
 				isTrackingTooltip = false
 				return
 			end
-
+			if parent ~= UIParent then
+				isTrackingTooltip = false
+				return
+			end
 			isTrackingTooltip = true
 			self:UpdateTooltipPosition(tooltip)
 		end)
