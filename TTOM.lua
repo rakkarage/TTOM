@@ -1,6 +1,6 @@
 TTOM = CreateFrame("Frame")
 TTOM.name = "TTOM"
-TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true }
+TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true }
 
 local isTrackingTooltip = false
 
@@ -11,8 +11,8 @@ function TTOM:UpdateTooltipPosition(tooltip)
 	local cursorX, cursorY = GetCursorPosition()
 	local scale = UIParent:GetEffectiveScale()
 
-	local x = cursorX / scale + (tonumber(db.x) or self.defaults.x)
-	local y = cursorY / scale + (tonumber(db.y) or self.defaults.y)
+	local x = (cursorX / scale) + (db.x or self.defaults.x)
+	local y = (cursorY / scale) + (db.y or self.defaults.y)
 
 	tooltip:ClearAllPoints()
 	tooltip:SetPoint(db.anchor, UIParent, "BOTTOMLEFT", x, y)
@@ -62,7 +62,11 @@ function TTOM:InitializeOptions()
 
 	Settings.CreateCheckbox(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean,
-			"Allow in combat", self.defaults.combat))
+			"Enable in combat", self.defaults.combat), "Enabled in combat.")
+
+	Settings.CreateCheckbox(category,
+		Settings.RegisterAddOnSetting(category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean,
+			"Enable fade", self.defaults.fade), "Fade tooltip.")
 end
 
 function TTOM:OnEvent(event, ...)
@@ -81,6 +85,10 @@ function TTOM:ADDON_LOADED(event, name)
 		end
 
 		self:InitializeOptions()
+
+		hooksecurefunc(GameTooltip, "FadeOut", function(tooltip)
+			if TTOMDB and not TTOMDB.fade then tooltip:Hide() end
+		end)
 
 		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
