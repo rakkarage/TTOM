@@ -12,6 +12,4 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
         with:
-          args: |
-            -p ${{ vars.CF_PROJECT_ID }}
-            -w ${{ vars.WOWI_PROJECT_ID }}
+          args: -p ${{ vars.CF_PROJECT_ID }} -w ${{ vars.WOWI_PROJECT_ID }}
