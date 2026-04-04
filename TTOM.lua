@@ -67,12 +67,12 @@ function TTOM:InitializeOptions()
 	Settings.CreateCheckbox(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean,
 			"Enable fade", self.defaults.fade), "Fade tooltip.")
+
+	Settings.RegisterAddOnCategory(category)
 end
 
 function TTOM:OnEvent(event, ...)
-	if self[event] then
-		self[event](self, event, ...)
-	end
+	if self[event] then self[event](self, event, ...) end
 end
 
 function TTOM:ADDON_LOADED(event, name)
