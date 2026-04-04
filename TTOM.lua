@@ -29,16 +29,15 @@ function TTOM:InitializeOptions()
 	end)
 
 	Settings.CreateSlider(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset",
-			self.defaults.x), sliderOptions, "Horizontal offset from cursor position")
+		Settings.RegisterAddOnSetting(category, "TTOM_X", "x", TTOMDB, Settings.VarType.Number, "X Offset", self.defaults.x),
+		sliderOptions, "Horizontal offset from cursor position")
 
 	Settings.CreateSlider(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset",
-			self.defaults.y), sliderOptions, "Vertical offset from cursor position")
+		Settings.RegisterAddOnSetting(category, "TTOM_Y", "y", TTOMDB, Settings.VarType.Number, "Y Offset", self.defaults.y),
+		sliderOptions, "Vertical offset from cursor position")
 
 	Settings.CreateDropdown(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point",
-			self.defaults.anchor),
+		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point", self.defaults.anchor),
 		function()
 			local container = Settings.CreateControlTextContainer()
 			local anchors = {
@@ -61,12 +60,12 @@ function TTOM:InitializeOptions()
 		end, "Tooltip anchor point relative to cursor")
 
 	Settings.CreateCheckbox(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean,
-			"Enable in combat", self.defaults.combat), "Enabled in combat.")
+		Settings.RegisterAddOnSetting(category, "TTOM_Combat", "combat", TTOMDB, Settings.VarType.Boolean, "Enable in combat", self.defaults.combat),
+		"Enabled in combat.")
 
 	Settings.CreateCheckbox(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean,
-			"Enable fade", self.defaults.fade), "Fade tooltip.")
+		Settings.RegisterAddOnSetting(category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean, "Enable fade", self.defaults.fade),
+		"Fade tooltip.")
 
 	Settings.RegisterAddOnCategory(category)
 end
