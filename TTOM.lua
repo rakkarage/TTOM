@@ -21,7 +21,6 @@ end
 function TTOM:InitializeOptions()
 	local category = Settings.RegisterVerticalLayoutCategory(self.name)
 	self.category = category
-	Settings.RegisterAddOnCategory(category)
 
 	local sliderOptions = Settings.CreateSliderOptions(-200, 200, 4)
 	sliderOptions:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value)
