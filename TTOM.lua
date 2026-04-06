@@ -59,8 +59,12 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:InitializeOptions()
 
+		-- Hook fade-out to allow Blizzard's default fade behavior when enabled.
+		-- When fade is disabled, override with instant Hide() instead.
 		hooksecurefunc(GameTooltip, "FadeOut", function(tooltip)
-			if TTOMDB and not TTOMDB.fade then tooltip:Hide() end
+			if TTOMDB and not TTOMDB.fade then
+				tooltip:Hide()
+			end
 		end)
 
 		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
