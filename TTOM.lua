@@ -9,6 +9,27 @@ TTOM.name = addonName
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true }
 TTOM.isTrackingTooltip = false
 
+-- Cached anchor points for the settings dropdown (avoids rebuilding the list on every render).
+TTOM.anchorPoints = {
+	{ "TOPLEFT",     "Top Left" },
+	{ "TOP",         "Top" },
+	{ "TOPRIGHT",    "Top Right" },
+	{ "LEFT",        "Left" },
+	{ "CENTER",      "Center" },
+	{ "RIGHT",       "Right" },
+	{ "BOTTOMLEFT",  "Bottom Left" },
+	{ "BOTTOM",      "Bottom" },
+	{ "BOTTOMRIGHT", "Bottom Right" },
+}
+
+-- Helper: Check if we should suppress tooltip tracking due to combat lock and settings.
+function TTOM:ShouldTrackTooltip()
+	if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
+		return false
+	end
+	return true
+end
+
 function TTOM:UpdateTooltipPosition(tooltip)
 	local db = TTOMDB
 	if not db then return end
@@ -43,7 +64,7 @@ function TTOM:ADDON_LOADED(event, name)
 		end)
 
 		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
+			if not TTOM:ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
 				return
 			end
@@ -56,8 +77,7 @@ function TTOM:ADDON_LOADED(event, name)
 		end)
 
 		GameTooltip:HookScript("OnUpdate", function(tooltip)
-			if not TTOM.isTrackingTooltip then return end
-			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
+			if not TTOM.isTrackingTooltip or not TTOM:ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
 				return
 			end
@@ -96,20 +116,8 @@ function TTOM:InitializeOptions()
 		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point", self.defaults.anchor),
 		function()
 			local container = Settings.CreateControlTextContainer()
-			local anchors = {
-				{ "TOPLEFT",     "Top Left" },
-				{ "TOP",         "Top" },
-				{ "TOPRIGHT",    "Top Right" },
-
-				{ "LEFT",        "Left" },
-				{ "CENTER",      "Center" },
-				{ "RIGHT",       "Right" },
-
-				{ "BOTTOMLEFT",  "Bottom Left" },
-				{ "BOTTOM",      "Bottom" },
-				{ "BOTTOMRIGHT", "Bottom Right" },
-			}
-			for _, entry in ipairs(anchors) do
+			-- Use cached anchor points instead of rebuilding the list each time.
+			for _, entry in ipairs(self.anchorPoints) do
 				container:Add(entry[1], entry[2])
 			end
 			return container:GetData()
