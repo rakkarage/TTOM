@@ -1,8 +1,13 @@
-TTOM = CreateFrame("Frame")
-TTOM.name = ...
-TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true }
+-- TTOM: Moves tooltips to cursor position
 
-local isTrackingTooltip = false
+local addonName, ns = ...
+
+ns.TTOM = CreateFrame("Frame")
+local TTOM = ns.TTOM
+TTOM.name = addonName
+
+TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true }
+TTOM.isTrackingTooltip = false
 
 function TTOM:UpdateTooltipPosition(tooltip)
 	local db = TTOMDB
@@ -17,6 +22,58 @@ function TTOM:UpdateTooltipPosition(tooltip)
 	tooltip:ClearAllPoints()
 	tooltip:SetPoint(db.anchor, UIParent, "BOTTOMLEFT", x, y)
 end
+
+function TTOM:OnEvent(event, ...)
+	if self[event] then self[event](self, event, ...) end
+end
+
+function TTOM:ADDON_LOADED(event, name)
+	if name == self.name then
+		TTOMDB = TTOMDB or {}
+		for key, value in pairs(self.defaults) do
+			if TTOMDB[key] == nil then
+				TTOMDB[key] = value
+			end
+		end
+
+		self:InitializeOptions()
+
+		hooksecurefunc(GameTooltip, "FadeOut", function(tooltip)
+			if TTOMDB and not TTOMDB.fade then tooltip:Hide() end
+		end)
+
+		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
+				TTOM.isTrackingTooltip = false
+				return
+			end
+			if parent == _G["OPieVisualElementsProxy"] then
+				TTOM.isTrackingTooltip = false
+				return
+			end
+			TTOM.isTrackingTooltip = true
+			self:UpdateTooltipPosition(tooltip)
+		end)
+
+		GameTooltip:HookScript("OnUpdate", function(tooltip)
+			if not TTOM.isTrackingTooltip then return end
+			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
+				TTOM.isTrackingTooltip = false
+				return
+			end
+			self:UpdateTooltipPosition(tooltip)
+		end)
+
+		GameTooltip:HookScript("OnHide", function()
+			TTOM.isTrackingTooltip = false
+		end)
+
+		self:UnregisterEvent(event)
+	end
+end
+
+TTOM:SetScript("OnEvent", TTOM.OnEvent)
+TTOM:RegisterEvent("ADDON_LOADED")
 
 function TTOM:InitializeOptions()
 	local category = Settings.RegisterVerticalLayoutCategory(self.name)
@@ -68,58 +125,6 @@ function TTOM:InitializeOptions()
 
 	Settings.RegisterAddOnCategory(category)
 end
-
-function TTOM:OnEvent(event, ...)
-	if self[event] then self[event](self, event, ...) end
-end
-
-function TTOM:ADDON_LOADED(event, name)
-	if name == self.name then
-		TTOMDB = TTOMDB or {}
-		for key, value in pairs(self.defaults) do
-			if TTOMDB[key] == nil then
-				TTOMDB[key] = value
-			end
-		end
-
-		self:InitializeOptions()
-
-		hooksecurefunc(GameTooltip, "FadeOut", function(tooltip)
-			if TTOMDB and not TTOMDB.fade then tooltip:Hide() end
-		end)
-
-		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
-				isTrackingTooltip = false
-				return
-			end
-			if parent == _G["OPieVisualElementsProxy"] then
-				isTrackingTooltip = false
-				return
-			end
-			isTrackingTooltip = true
-			self:UpdateTooltipPosition(tooltip)
-		end)
-
-		GameTooltip:HookScript("OnUpdate", function(tooltip)
-			if not isTrackingTooltip then return end
-			if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
-				isTrackingTooltip = false
-				return
-			end
-			self:UpdateTooltipPosition(tooltip)
-		end)
-
-		GameTooltip:HookScript("OnHide", function()
-			isTrackingTooltip = false
-		end)
-
-		self:UnregisterEvent(event)
-	end
-end
-
-TTOM:SetScript("OnEvent", TTOM.OnEvent)
-TTOM:RegisterEvent("ADDON_LOADED")
 
 function TTOM_Settings()
 	if not InCombatLockdown() then
