@@ -1,4 +1,4 @@
--- TTOM: Moves tooltips to cursor position
+-- 💬 TTOM: Attach tooltip to mouse, with anchor and offset.
 
 local addonName, ns = ...
 
