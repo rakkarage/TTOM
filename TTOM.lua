@@ -6,7 +6,7 @@ ns.TTOM = CreateFrame("Frame")
 local TTOM = ns.TTOM
 TTOM.name = addonName
 
-TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true }
+TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true, compatibility = true }
 TTOM.isTrackingTooltip = false
 
 -- Cached anchor points for the settings dropdown (avoids rebuilding the list on every render).
@@ -28,6 +28,14 @@ function TTOM:ShouldTrackTooltip()
 		return false
 	end
 	return true
+end
+
+function TTOM:ShouldSkipCompatibilityAnchor(parent)
+	if TTOMDB and TTOMDB.compatibility == false then
+		return false
+	end
+
+	return parent == _G["OPieVisualElementsProxy"]
 end
 
 function TTOM:UpdateTooltipPosition(tooltip)
@@ -72,7 +80,9 @@ function TTOM:ADDON_LOADED(event, name)
 				TTOM.isTrackingTooltip = false
 				return
 			end
-			if parent == _G["OPieVisualElementsProxy"] then
+			-- Compatibility escape hatch: some addons intentionally place tooltips away
+			-- from the cursor. Unless Compatibility is disabled, leave those anchors alone.
+			if TTOM:ShouldSkipCompatibilityAnchor(parent) then
 				TTOM.isTrackingTooltip = false
 				return
 			end
@@ -134,6 +144,10 @@ function TTOM:InitializeOptions()
 	Settings.CreateCheckbox(category,
 		Settings.RegisterAddOnSetting(category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean, "Enable fade", self.defaults.fade),
 		"Fade tooltip.")
+
+	Settings.CreateCheckbox(category,
+		Settings.RegisterAddOnSetting(category, "TTOM_Compatibility", "compatibility", TTOMDB, Settings.VarType.Boolean, "Compatibility", self.defaults.compatibility),
+		"Respect compatibility anchors used by other addons.")
 
 	Settings.RegisterAddOnCategory(category)
 end
