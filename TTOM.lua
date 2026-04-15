@@ -1,14 +1,12 @@
 -- 💬 TTOM: Attach tooltip to mouse, with anchor and offset.
 
-local addonName, ns = ...
+local _, ns = ...
 
 ns.TTOM = CreateFrame("Frame")
 local TTOM = ns.TTOM
-TTOM.name = addonName
 
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true, force = false }
 TTOM.isTrackingTooltip = false
-
 
 function TTOM:UpdateTooltipPosition(tooltip, force)
 	local db = TTOMDB
