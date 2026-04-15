@@ -6,23 +6,9 @@ ns.TTOM = CreateFrame("Frame")
 local TTOM = ns.TTOM
 TTOM.name = addonName
 
-TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true, compatibility = true }
+TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true, force = false }
 TTOM.isTrackingTooltip = false
 
--- Cached anchor points for the settings dropdown (avoids rebuilding the list on every render).
-TTOM.anchorPoints = {
-	{ "TOPLEFT",     "Top Left" },
-	{ "TOP",         "Top" },
-	{ "TOPRIGHT",    "Top Right" },
-	{ "LEFT",        "Left" },
-	{ "CENTER",      "Center" },
-	{ "RIGHT",       "Right" },
-	{ "BOTTOMLEFT",  "Bottom Left" },
-	{ "BOTTOM",      "Bottom" },
-	{ "BOTTOMRIGHT", "Bottom Right" },
-}
-
--- Helper: Check if we should suppress tooltip tracking due to combat lock and settings.
 function TTOM:ShouldTrackTooltip()
 	if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
 		return false
@@ -30,15 +16,7 @@ function TTOM:ShouldTrackTooltip()
 	return true
 end
 
-function TTOM:ShouldSkipCompatibilityAnchor(parent)
-	if TTOMDB and TTOMDB.compatibility == false then
-		return false
-	end
-
-	return parent == _G["OPieVisualElementsProxy"]
-end
-
-function TTOM:UpdateTooltipPosition(tooltip)
+function TTOM:UpdateTooltipPosition(tooltip, force)
 	local db = TTOMDB
 	if not db then return end
 
@@ -47,6 +25,10 @@ function TTOM:UpdateTooltipPosition(tooltip)
 
 	local x = (cursorX / scale) + (db.x or self.defaults.x)
 	local y = (cursorY / scale) + (db.y or self.defaults.y)
+
+	if force and tooltip:GetOwner() == _G["OPieVisualElementsProxy"] then
+		tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+	end
 
 	tooltip:ClearAllPoints()
 	tooltip:SetPoint(db.anchor, UIParent, "BOTTOMLEFT", x, y)
@@ -67,35 +49,32 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:InitializeOptions()
 
-		-- Hook fade-out to allow Blizzard's default fade behavior when enabled.
-		-- When fade is disabled, override with instant Hide() instead.
 		hooksecurefunc(GameTooltip, "FadeOut", function(tooltip)
 			if TTOMDB and not TTOMDB.fade then
 				tooltip:Hide()
 			end
 		end)
 
-		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, _)
+			local db = TTOMDB
 			if not TTOM:ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
 				return
 			end
-			-- Compatibility escape hatch: some addons intentionally place tooltips away
-			-- from the cursor. Unless Compatibility is disabled, leave those anchors alone.
-			if TTOM:ShouldSkipCompatibilityAnchor(parent) then
-				TTOM.isTrackingTooltip = false
-				return
-			end
 			TTOM.isTrackingTooltip = true
-			self:UpdateTooltipPosition(tooltip)
+			self:UpdateTooltipPosition(tooltip, db.force)
 		end)
 
 		GameTooltip:HookScript("OnUpdate", function(tooltip)
-			if not TTOM.isTrackingTooltip or not TTOM:ShouldTrackTooltip() then
+			local db = TTOMDB
+			if db and db.force and tooltip:IsShown() then
+				TTOM.isTrackingTooltip = true
+				TTOM:UpdateTooltipPosition(tooltip, true)
+			elseif not TTOM:ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
-				return
+			elseif TTOM.isTrackingTooltip then
+				self:UpdateTooltipPosition(tooltip)
 			end
-			self:UpdateTooltipPosition(tooltip)
 		end)
 
 		GameTooltip:HookScript("OnHide", function()
@@ -130,10 +109,15 @@ function TTOM:InitializeOptions()
 		Settings.RegisterAddOnSetting(category, "TTOM_Anchor", "anchor", TTOMDB, Settings.VarType.String, "Anchor Point", self.defaults.anchor),
 		function()
 			local container = Settings.CreateControlTextContainer()
-			-- Use cached anchor points instead of rebuilding the list each time.
-			for _, entry in ipairs(self.anchorPoints) do
-				container:Add(entry[1], entry[2])
-			end
+			container:Add("TOPLEFT", "Top Left")
+			container:Add("TOP", "Top")
+			container:Add("TOPRIGHT", "Top Right")
+			container:Add("LEFT", "Left")
+			container:Add("CENTER", "Center")
+			container:Add("RIGHT", "Right")
+			container:Add("BOTTOMLEFT", "Bottom Left")
+			container:Add("BOTTOM", "Bottom")
+			container:Add("BOTTOMRIGHT", "Bottom Right")
 			return container:GetData()
 		end, "Tooltip anchor point relative to cursor")
 
@@ -146,8 +130,8 @@ function TTOM:InitializeOptions()
 		"Fade tooltip.")
 
 	Settings.CreateCheckbox(category,
-		Settings.RegisterAddOnSetting(category, "TTOM_Compatibility", "compatibility", TTOMDB, Settings.VarType.Boolean, "Compatibility", self.defaults.compatibility),
-		"Respect compatibility anchors used by other addons.")
+		Settings.RegisterAddOnSetting(category, "TTOM_Force", "force", TTOMDB, Settings.VarType.Boolean, "Force override", self.defaults.force),
+		"Force tooltip follow.")
 
 	Settings.RegisterAddOnCategory(category)
 end
