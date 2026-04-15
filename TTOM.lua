@@ -10,10 +10,7 @@ TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = tru
 TTOM.isTrackingTooltip = false
 
 function TTOM:ShouldTrackTooltip()
-	if InCombatLockdown() and not (TTOMDB and TTOMDB.combat) then
-		return false
-	end
-	return true
+	return not InCombatLockdown() or (TTOMDB and TTOMDB.combat)
 end
 
 function TTOM:UpdateTooltipPosition(tooltip, force)
