@@ -9,9 +9,6 @@ TTOM.name = addonName
 TTOM.defaults = { x = 32, y = -32, anchor = "TOPLEFT", combat = true, fade = true, force = false }
 TTOM.isTrackingTooltip = false
 
-function TTOM:ShouldTrackTooltip()
-	return not InCombatLockdown() or (TTOMDB and TTOMDB.combat)
-end
 
 function TTOM:UpdateTooltipPosition(tooltip, force)
 	local db = TTOMDB
@@ -46,6 +43,10 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:InitializeOptions()
 
+		local function ShouldTrackTooltip()
+			return not InCombatLockdown() or (TTOMDB and TTOMDB.combat)
+		end
+
 		hooksecurefunc(GameTooltip, "FadeOut", function(tooltip)
 			if TTOMDB and not TTOMDB.fade then
 				tooltip:Hide()
@@ -54,7 +55,7 @@ function TTOM:ADDON_LOADED(event, name)
 
 		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, _)
 			local db = TTOMDB
-			if not TTOM:ShouldTrackTooltip() then
+			if not ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
 				return
 			end
@@ -67,7 +68,7 @@ function TTOM:ADDON_LOADED(event, name)
 			if db and db.force and tooltip:IsShown() then
 				TTOM.isTrackingTooltip = true
 				TTOM:UpdateTooltipPosition(tooltip, true)
-			elseif not TTOM:ShouldTrackTooltip() then
+			elseif not ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
 			elseif TTOM.isTrackingTooltip then
 				self:UpdateTooltipPosition(tooltip)
