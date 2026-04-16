@@ -27,9 +27,6 @@ function TTOM:UpdateTooltipPosition(tooltip, force)
 	tooltip:SetPoint(db.anchor, UIParent, "BOTTOMLEFT", x, y)
 end
 
-function TTOM:ADDON_LOADED(event, name)
-end
-
 TTOM:SetScript("OnEvent", function(self, event, ...)
 	if event == "ADDON_LOADED" then
 		local name = ...
@@ -56,38 +53,31 @@ TTOM:SetScript("OnEvent", function(self, event, ...)
 
 		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
 			local db = TTOMDB
-			if not ShouldTrackTooltip() then
-				TTOM.isTrackingTooltip = false
-				return
-			end
-			if not db.force and tooltip:GetOwner() == _G["OPieVisualElementsProxy"] then
-				TTOM.isTrackingTooltip = false
-				return
-			end
-			TTOM.isTrackingTooltip = true
+			self.isTrackingTooltip = false
+			if not ShouldTrackTooltip() then return end
+			if not db.force and tooltip:GetOwner() == _G["OPieVisualElementsProxy"] then return end
+			self.isTrackingTooltip = true
 			self:UpdateTooltipPosition(tooltip, db.force)
 		end)
 
 		GameTooltip:HookScript("OnUpdate", function(tooltip)
 			local db = TTOMDB
 			if not ShouldTrackTooltip() then
-				TTOM.isTrackingTooltip = false
+				self.isTrackingTooltip = false
 				return
 			end
-			if db and db.force then
-				if tooltip:GetOwner() == _G["OPieVisualElementsProxy"] then
-					TTOM.isTrackingTooltip = true
-					TTOM:UpdateTooltipPosition(tooltip, true)
-				end
+			if db and db.force and tooltip:GetOwner() == _G["OPieVisualElementsProxy"] then
+				self.isTrackingTooltip = true
+				self:UpdateTooltipPosition(tooltip, true)
 				return
 			end
-			if TTOM.isTrackingTooltip then
+			if self.isTrackingTooltip then
 				self:UpdateTooltipPosition(tooltip)
 			end
 		end)
 
 		GameTooltip:HookScript("OnHide", function()
-			TTOM.isTrackingTooltip = false
+			self.isTrackingTooltip = false
 		end)
 
 		self:UnregisterEvent(event)
