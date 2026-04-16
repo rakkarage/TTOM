@@ -27,12 +27,14 @@ function TTOM:UpdateTooltipPosition(tooltip, force)
 	tooltip:SetPoint(db.anchor, UIParent, "BOTTOMLEFT", x, y)
 end
 
-function TTOM:OnEvent(event, ...)
-	if self[event] then self[event](self, event, ...) end
+function TTOM:ADDON_LOADED(event, name)
 end
 
-function TTOM:ADDON_LOADED(event, name)
-	if name == self.name then
+TTOM:SetScript("OnEvent", function(self, event, ...)
+	if event == "ADDON_LOADED" then
+		local name = ...
+		if name ~= self.name then return end
+
 		TTOMDB = TTOMDB or {}
 		for key, value in pairs(self.defaults) do
 			if TTOMDB[key] == nil then
@@ -52,7 +54,7 @@ function TTOM:ADDON_LOADED(event, name)
 			end
 		end)
 
-		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, _)
+		hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
 			local db = TTOMDB
 			if not ShouldTrackTooltip() then
 				TTOM.isTrackingTooltip = false
@@ -90,9 +92,7 @@ function TTOM:ADDON_LOADED(event, name)
 
 		self:UnregisterEvent(event)
 	end
-end
-
-TTOM:SetScript("OnEvent", TTOM.OnEvent)
+end)
 TTOM:RegisterEvent("ADDON_LOADED")
 
 function TTOM:InitializeOptions()
