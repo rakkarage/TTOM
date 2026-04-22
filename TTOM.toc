@@ -5,7 +5,7 @@
 ## SavedVariables: TTOMDB
 ## AddonCompartmentFunc: TTOM_Settings
 ## IconTexture: Interface/AddOns/TTOM/TTOM.png
-## Interface: 120001
+## Interface: 120005
 ## Version: v2026.4
 
 TTOM.lua
