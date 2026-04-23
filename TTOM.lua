@@ -117,11 +117,11 @@ function InitializeOptions()
 
 	Settings.CreateCheckbox(_category,
 		Settings.RegisterAddOnSetting(_category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean, "Enable fade", _defaults.fade),
-		"Fade tooltip.")
+		"Fade only world tooltips (matches Blizzard default; UI tooltips are not affected).")
 
 	Settings.CreateCheckbox(_category,
-		Settings.RegisterAddOnSetting(_category, "TTOM_Force", "force", TTOMDB, Settings.VarType.Boolean, "Force override", _defaults.force),
-		"Force tooltip follow.")
+		Settings.RegisterAddOnSetting(_category, "TTOM_Force", "force", TTOMDB, Settings.VarType.Boolean, "Force", _defaults.force),
+		"Fix for tooltips not following the cursor.")
 
 	Settings.RegisterAddOnCategory(_category)
 end
