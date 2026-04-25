@@ -1,4 +1,4 @@
-## Title: TTOM
+## Title: ToolTip On Mouse (TTOM)
 ## Notes: Attach tooltip to mouse, with anchor and offset.
 ## Category: User Interface
 ## Author: egingell, rakkarage

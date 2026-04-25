@@ -1,6 +1,7 @@
 -- 💬 TTOM: Attach tooltip to mouse, with anchor and offset.
 
 local _addonName = ...
+local _customName = "ToolTipOnMouse (TTOM)"
 
 local _frame = CreateFrame("Frame")
 
@@ -80,7 +81,7 @@ _frame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 function InitializeOptions()
-	_category = Settings.RegisterVerticalLayoutCategory(_addonName)
+	_category = Settings.RegisterVerticalLayoutCategory(_customName)
 
 	local sliderOptions = Settings.CreateSliderOptions(-200, 200, 4)
 	sliderOptions:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value)
@@ -117,11 +118,11 @@ function InitializeOptions()
 
 	Settings.CreateCheckbox(_category,
 		Settings.RegisterAddOnSetting(_category, "TTOM_Fade", "fade", TTOMDB, Settings.VarType.Boolean, "Enable fade", _defaults.fade),
-		"Fade only world tooltips (matches Blizzard default; UI tooltips are not affected).")
+		"Fade world tooltips.")
 
 	Settings.CreateCheckbox(_category,
 		Settings.RegisterAddOnSetting(_category, "TTOM_Force", "force", TTOMDB, Settings.VarType.Boolean, "Force", _defaults.force),
-		"Fix for tooltips not following the cursor.")
+		"Force tooltip follow.")
 
 	Settings.RegisterAddOnCategory(_category)
 end
